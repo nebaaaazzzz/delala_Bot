@@ -1,33 +1,16 @@
+import {
+  brokerMainMenuKeyboard,
+  sharePhoneKeyboard,
+} from "../components/keyboards";
+import { SUBCITIES } from "../config/constants";
 import { MyContext, MyConversation } from "../types";
-const subCities = [
-  "Addis",
-  "Akaky",
-  "Arada",
-  "Bole",
-  "Gullele",
-  "Kirkos",
-  "Kolfe",
-  "Lideta",
-  "Nifas Silk-Lafto",
-  "Yeka",
-];
+
 export default async function brokerRegistration(
   conversation: MyConversation,
   ctx: MyContext
 ) {
   await ctx.reply("please share your context", {
-    reply_markup: {
-      resize_keyboard: true,
-      one_time_keyboard: true,
-      keyboard: [
-        [
-          {
-            text: "Share Context",
-            request_contact: true,
-          },
-        ],
-      ],
-    },
+    reply_markup: sharePhoneKeyboard,
   });
   const contact = await conversation.waitFor(":contact", {
     otherwise: () => {
@@ -47,19 +30,17 @@ export default async function brokerRegistration(
 
   await ctx.reply("choose sub city", {
     reply_markup: {
-      keyboard: subCities.map((subCity) => [{ text: subCity }]),
+      keyboard: SUBCITIES.map((subCity) => [{ text: subCity }]),
     },
   });
-  const subCity = await conversation.form.select(subCities, async (ctx) =>
+  const subCity = await conversation.form.select(SUBCITIES, async (ctx) =>
     ctx.reply("choose sub city", {
       reply_markup: {
-        keyboard: subCities.map((subCity) => [{ text: subCity }]),
+        keyboard: SUBCITIES.map((subCity) => [{ text: subCity }]),
       },
     })
   );
   await ctx.reply("successfuly registerd", {
-    reply_markup: {
-      remove_keyboard: true,
-    },
+    reply_markup: brokerMainMenuKeyboard,
   });
 }
