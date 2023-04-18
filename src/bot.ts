@@ -4,7 +4,6 @@ import dotenv from "dotenv";
 import { MyContext, MyConversation } from "./types";
 import greetingConversation from "./conversations/greeting.conversation";
 dotenv.config();
-// swc ./src -d build
 const bot = new Bot<MyContext>(process.env.TELEGRAM_TOKEN);
 
 bot.use(session({ initial: () => ({}) }));
