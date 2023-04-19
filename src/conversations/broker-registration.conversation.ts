@@ -9,7 +9,7 @@ export default async function brokerRegistration(
   conversation: MyConversation,
   ctx: MyContext
 ) {
-  await ctx.reply("please share your context", {
+  await ctx.reply("please share your contact", {
     reply_markup: sharePhoneKeyboard,
   });
   const contact = await conversation.waitFor(":contact", {
@@ -22,11 +22,7 @@ export default async function brokerRegistration(
       remove_keyboard: true,
     },
   });
-  const name = await conversation.waitFor(":text", {
-    otherwise: () => {
-      ctx.reply("please send your name");
-    },
-  });
+  const fullName = await conversation.form.text(async (ctx) => {});
 
   await ctx.reply("choose sub city", {
     reply_markup: {
@@ -40,7 +36,9 @@ export default async function brokerRegistration(
       },
     })
   );
-  await ctx.reply("successfuly registerd", {
-    reply_markup: brokerMainMenuKeyboard,
-  });
+  return {
+    contact,
+    fullName,
+    subCity,
+  };
 }

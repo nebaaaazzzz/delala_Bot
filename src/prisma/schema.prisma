@@ -16,18 +16,28 @@ enum Status {
 }
 enum UserType {
   BROKER
-  USER
+  HOME_SEEKER
+  ADMIN
+}
+enum Language {
+  EN
+  AM
+}
+enum HousePostType {
+  RENT
+  SALE
 }
 model Session {
   id    Int    @id @default(autoincrement())
   key   String @unique
-  value String
+  value String @db.LongText()
 }
 model User{
   telegramId String  @id @unique 
   firstName String?
   lastName String? 
   userType UserType 
+  language Language @default(EN)
   phoneNumber String? @unique
   userName String? @unique 
   houses House[]
@@ -42,6 +52,9 @@ model  House{
   houseImages HouseImage[]
   numberOfBedrooms Int
   numberOfBathrooms Int
+  housePostType HousePostType
+  price Float
+  area Float
   status Status @default(PENDING)
   userTelegramID String
   user  User @relation(fields: [userTelegramID], references: [telegramId] ,onDelete: Cascade) 

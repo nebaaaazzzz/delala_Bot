@@ -1,9 +1,13 @@
+import { Language, UserType } from "@prisma/client";
 import { selectLanguageInlineKeyboard } from "../components/inline-keyboard";
-import { selectUserTypeKeyboard } from "../components/keyboards";
+import {
+  brokerMainMenuKeyboard,
+  selectUserTypeKeyboard,
+} from "../components/keyboards";
 import { BROKER, EN_LANGUAGE, HOME_SEEKER } from "../config/constants";
+import { User } from "../config/prisma";
 import { MyContext, MyConversation } from "../types";
 import brokerRegistration from "./broker-registration.conversation";
-
 export default async function greetingConversation(
   conversation: MyConversation,
   ctx: MyContext
@@ -17,7 +21,8 @@ export default async function greetingConversation(
       ctx.reply("please select language");
     },
   }); //TODO add regex to limit worde l
-  if (callbackQuery.data === EN_LANGUAGE) {
+  const language = callbackQuery.data;
+  if (language === EN_LANGUAGE) {
     await ctx.reply("You selected English", {
       reply_markup: selectUserTypeKeyboard,
     });
@@ -26,14 +31,32 @@ export default async function greetingConversation(
       reply_markup: selectUserTypeKeyboard,
     });
   }
-  const d = await conversation.form.select([BROKER, HOME_SEEKER], async (ctx) =>
-    ctx.reply("Select One of", {
-      reply_markup: selectUserTypeKeyboard,
-    })
+  const userType = await conversation.form.select(
+    [BROKER, HOME_SEEKER],
+    async (ctx) =>
+      ctx.reply("Select One of", {
+        reply_markup: selectUserTypeKeyboard,
+      })
   );
-  if (d == BROKER) {
-    await brokerRegistration(conversation, ctx);
+  if (userType == BROKER) {
+    const { contact, fullName, subCity } = await brokerRegistration(
+      conversation,
+      ctx
+    );
+    await User.create({
+      data: {
+        telegramId: String(ctx.from?.id),
+        userType: UserType.BROKER,
+        firstName: ctx.from?.first_name,
+        lastName: ctx.from?.last_name,
+        phoneNumber: contact.message?.contact?.phone_number,
+        language: language as Language,
+        userName: ctx.from?.username,
+      },
+    });
+    await ctx.reply("successfuly registerd", {
+      reply_markup: brokerMainMenuKeyboard,
+    });
   } else {
   }
-  console.log(d);
 }

@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `User` MODIFY `userType` ENUM('BROKER', 'HOME_SEEKER', 'ADMIN') NOT NULL;

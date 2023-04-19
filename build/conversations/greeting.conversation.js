@@ -8,103 +8,58 @@ Object.defineProperty(exports, "default", {
         return greetingConversation;
     }
 });
+const _client = require("@prisma/client");
+const _inlinekeyboard = require("../components/inline-keyboard");
+const _keyboards = require("../components/keyboards");
+const _constants = require("../config/constants");
+const _prisma = require("../config/prisma");
 const _brokerregistrationconversation = /*#__PURE__*/ _interop_require_default(require("./broker-registration.conversation"));
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
 }
-const EN_LANGUAGE = "en";
-const AM_LANGUAGE = "am";
-const BROKER = "Broker";
-const HOME_SEEKER = "Home Seeker";
-const LANGUAGES = [
-    EN_LANGUAGE,
-    AM_LANGUAGE
-];
-const USERS = [
-    BROKER,
-    HOME_SEEKER
-];
 async function greetingConversation(conversation, ctx) {
     await ctx.reply(`Welcome! ${ctx?.from?.first_name}`);
     let message = await ctx.reply("Select language", {
-        reply_markup: {
-            inline_keyboard: [
-                [
-                    {
-                        text: "English",
-                        callback_data: EN_LANGUAGE
-                    },
-                    {
-                        text: "Amharic",
-                        callback_data: AM_LANGUAGE
-                    }
-                ]
-            ]
-        }
+        reply_markup: _inlinekeyboard.selectLanguageInlineKeyboard
     });
     const { callbackQuery  } = await conversation.waitFor("callback_query:data", {
         otherwise: ()=>{
             ctx.reply("please select language");
         }
     }); //TODO add regex to limit worde l
-    if (callbackQuery.data === EN_LANGUAGE) {
+    const language = callbackQuery.data;
+    if (language === _constants.EN_LANGUAGE) {
         await ctx.reply("You selected English", {
-            reply_markup: {
-                resize_keyboard: true,
-                one_time_keyboard: true,
-                keyboard: [
-                    [
-                        {
-                            text: BROKER
-                        },
-                        {
-                            text: HOME_SEEKER
-                        }
-                    ]
-                ]
-            }
+            reply_markup: _keyboards.selectUserTypeKeyboard
         });
     } else {
         await ctx.reply("You selected Amharic", {
-            reply_markup: {
-                resize_keyboard: true,
-                one_time_keyboard: true,
-                keyboard: [
-                    [
-                        {
-                            text: BROKER
-                        },
-                        {
-                            text: HOME_SEEKER
-                        }
-                    ]
-                ]
-            }
+            reply_markup: _keyboards.selectUserTypeKeyboard
         });
     }
-    const d = await conversation.form.select([
-        BROKER,
-        HOME_SEEKER
+    const userType = await conversation.form.select([
+        _client.UserType.BROKER,
+        _constants.HOME_SEEKER
     ], async (ctx)=>ctx.reply("Select One of", {
-            reply_markup: {
-                resize_keyboard: true,
-                one_time_keyboard: true,
-                keyboard: [
-                    [
-                        {
-                            text: BROKER
-                        },
-                        {
-                            text: HOME_SEEKER
-                        }
-                    ]
-                ]
-            }
+            reply_markup: _keyboards.selectUserTypeKeyboard
         }));
-    if (d == BROKER) {
-        await (0, _brokerregistrationconversation.default)(conversation, ctx);
+    if (userType == _client.UserType.BROKER) {
+        const { contact , fullName , subCity  } = await (0, _brokerregistrationconversation.default)(conversation, ctx);
+        await _prisma.User.create({
+            data: {
+                telegramId: String(ctx.from?.id),
+                userType: _client.UserType.BROKER,
+                firstName: ctx.from?.first_name,
+                lastName: ctx.from?.last_name,
+                phoneNumber: contact.message?.contact?.phone_number,
+                language: language,
+                userName: ctx.from?.username
+            }
+        });
+        await ctx.reply("successfuly registerd", {
+            reply_markup: _keyboards.brokerMainMenuKeyboard
+        });
     } else {}
-    console.log(d);
 }

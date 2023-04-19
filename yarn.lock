@@ -44,6 +44,21 @@
   dependencies:
     "@deno/shim-deno" "~0.9.0"
 
+"@grammyjs/ratelimiter@^1.1.6":
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/@grammyjs/ratelimiter/-/ratelimiter-1.1.6.tgz#06c3b5f3460d78f5f6618fafdd065e74dc01bed8"
+  integrity sha512-mqBWTdw9YwbQOhT1st3Car1MqoubafHLWYSb9/5UQUCc9EVqih7JmoBiyXB+vBvI3BMgDU5xoWh2gpeCXxURzw==
+
+"@grammyjs/router@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@grammyjs/router/-/router-2.0.0.tgz#da3a9191d5997d438f7e1cadc2d570d755cd3fc5"
+  integrity sha512-xJ3HRNj3mVojLtkFmV+GvKpOWOnS0CGdAIdvpaq+j+8dic1wM1OhOukaotkKzAWZ6bb9QyzUUgVFN6xfZDO5VA==
+
+"@grammyjs/storage-prisma@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@grammyjs/storage-prisma/-/storage-prisma-2.2.0.tgz#675cb27f3384722019075fa267d59514bbc6d3eb"
+  integrity sha512-4ifDaBj+7VijWQcq8Q2QqzdyB8KCjMktR324aV4Gwcgj/SP7pEFtB2n6QWm/ZQPJitYs/SZGTrB2qoKQEpiP5w==
+
 "@grammyjs/types@3.0.3":
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/@grammyjs/types/-/types-3.0.3.tgz#f979fa184d58ac2eb9bf33e28e64be413bd5d3e5"
@@ -88,6 +103,23 @@
   dependencies:
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
+
+"@prisma/client@4.13.0":
+  version "4.13.0"
+  resolved "https://registry.yarnpkg.com/@prisma/client/-/client-4.13.0.tgz#271d2b9756503ea17bbdb459c7995536cf2a6191"
+  integrity sha512-YaiiICcRB2hatxsbnfB66uWXjcRw3jsZdlAVxmx0cFcTc/Ad/sKdHCcWSnqyDX47vAewkjRFwiLwrOUjswVvmA==
+  dependencies:
+    "@prisma/engines-version" "4.13.0-50.1e7af066ee9cb95cf3a403c78d9aab3e6b04f37a"
+
+"@prisma/engines-version@4.13.0-50.1e7af066ee9cb95cf3a403c78d9aab3e6b04f37a":
+  version "4.13.0-50.1e7af066ee9cb95cf3a403c78d9aab3e6b04f37a"
+  resolved "https://registry.yarnpkg.com/@prisma/engines-version/-/engines-version-4.13.0-50.1e7af066ee9cb95cf3a403c78d9aab3e6b04f37a.tgz#ae338908d11685dee50e7683502d75442b955bf9"
+  integrity sha512-fsQlbkhPJf08JOzKoyoD9atdUijuGBekwoOPZC3YOygXEml1MTtgXVpnUNchQlRSY82OQ6pSGQ9PxUe4arcSLQ==
+
+"@prisma/engines@4.13.0":
+  version "4.13.0"
+  resolved "https://registry.yarnpkg.com/@prisma/engines/-/engines-4.13.0.tgz#582a6b90b6efeb0f465984f1fe0e72a4afaaa5ae"
+  integrity sha512-HrniowHRZXHuGT9XRgoXEaP2gJLXM5RMoItaY2PkjvuZ+iHc0Zjbm/302MB8YsPdWozAPHHn+jpFEcEn71OgPw==
 
 "@sindresorhus/is@^4.0.0":
   version "4.6.0"
@@ -742,6 +774,13 @@ pify@^2.2.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/pify/-/pify-2.3.0.tgz#ed141a6ac043a849ea588498e7dca8b15330e90c"
   integrity sha512-udgsAY+fTnvv7kI7aaxbqwWNb0AHiB0qBO89PZKPkoTmGOgdbrHDKD+0B2X4uTfJ/FT1R09r9gTsjUjNJotuog==
+
+prisma@^4.13.0:
+  version "4.13.0"
+  resolved "https://registry.yarnpkg.com/prisma/-/prisma-4.13.0.tgz#0b83f40acf50cd47d7463a135c4e9b275713e602"
+  integrity sha512-L9mqjnSmvWIRCYJ9mQkwCtj4+JDYYTdhoyo8hlsHNDXaZLh/b4hR0IoKIBbTKxZuyHQzLopb/+0Rvb69uGV7uA==
+  dependencies:
+    "@prisma/engines" "4.13.0"
 
 pseudomap@^1.0.2:
   version "1.0.2"

@@ -8,32 +8,11 @@ Object.defineProperty(exports, "default", {
         return brokerRegistration;
     }
 });
-const subCities = [
-    "Addis",
-    "Akaky",
-    "Arada",
-    "Bole",
-    "Gullele",
-    "Kirkos",
-    "Kolfe",
-    "Lideta",
-    "Nifas Silk-Lafto",
-    "Yeka"
-];
+const _keyboards = require("../components/keyboards");
+const _constants = require("../config/constants");
 async function brokerRegistration(conversation, ctx) {
-    await ctx.reply("please share your context", {
-        reply_markup: {
-            resize_keyboard: true,
-            one_time_keyboard: true,
-            keyboard: [
-                [
-                    {
-                        text: "Share Context",
-                        request_contact: true
-                    }
-                ]
-            ]
-        }
+    await ctx.reply("please share your contact", {
+        reply_markup: _keyboards.sharePhoneKeyboard
     });
     const contact = await conversation.waitFor(":contact", {
         otherwise: ()=>{
@@ -45,32 +24,28 @@ async function brokerRegistration(conversation, ctx) {
             remove_keyboard: true
         }
     });
-    const name = await conversation.waitFor(":text", {
-        otherwise: ()=>{
-            ctx.reply("please send your name");
-        }
-    });
+    const fullName = await conversation.form.text(async (ctx)=>{});
     await ctx.reply("choose sub city", {
         reply_markup: {
-            keyboard: subCities.map((subCity)=>[
+            keyboard: _constants.SUBCITIES.map((subCity)=>[
                     {
                         text: subCity
                     }
                 ])
         }
     });
-    const subCity = await conversation.form.select(subCities, async (ctx)=>ctx.reply("choose sub city", {
+    const subCity = await conversation.form.select(_constants.SUBCITIES, async (ctx)=>ctx.reply("choose sub city", {
             reply_markup: {
-                keyboard: subCities.map((subCity)=>[
+                keyboard: _constants.SUBCITIES.map((subCity)=>[
                         {
                             text: subCity
                         }
                     ])
             }
         }));
-    await ctx.reply("successfuly registerd", {
-        reply_markup: {
-            remove_keyboard: true
-        }
-    });
+    return {
+        contact,
+        fullName,
+        subCity
+    };
 }

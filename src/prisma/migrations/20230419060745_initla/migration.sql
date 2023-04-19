@@ -2,7 +2,7 @@
 CREATE TABLE `Session` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `key` VARCHAR(191) NOT NULL,
-    `value` VARCHAR(191) NOT NULL,
+    `value` LONGTEXT NOT NULL,
 
     UNIQUE INDEX `Session_key_key`(`key`),
     PRIMARY KEY (`id`)
@@ -13,6 +13,8 @@ CREATE TABLE `User` (
     `telegramId` VARCHAR(191) NOT NULL,
     `firstName` VARCHAR(191) NULL,
     `lastName` VARCHAR(191) NULL,
+    `userType` ENUM('BROKER', 'HOME_SEEKER') NOT NULL,
+    `language` ENUM('EN', 'AM') NOT NULL DEFAULT 'EN',
     `phoneNumber` VARCHAR(191) NULL,
     `userName` VARCHAR(191) NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -32,6 +34,9 @@ CREATE TABLE `House` (
     `propertyType` VARCHAR(191) NOT NULL,
     `numberOfBedrooms` INTEGER NOT NULL,
     `numberOfBathrooms` INTEGER NOT NULL,
+    `housePostType` ENUM('RENT', 'SALE') NOT NULL,
+    `price` DOUBLE NOT NULL,
+    `area` DOUBLE NOT NULL,
     `status` ENUM('APPROVED', 'PENDING', 'REJECTED') NOT NULL DEFAULT 'PENDING',
     `userTelegramID` VARCHAR(191) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),

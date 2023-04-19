@@ -1,11 +1,23 @@
+import { HousePostType } from "@prisma/client";
 import { confirmHousePostInlineKeyboard } from "../../components/inline-keyboard";
 import {
   brokerMainMenuKeyboard,
   cancelKeyboard,
   selectSubCityKeyboardWithCancle,
 } from "../../components/keyboards";
-import { SUBCITIES, SUBMIT } from "../../config/constants";
+import {
+  ADMIN_TELEGRAM_ID,
+  CANCEL,
+  SUBCITIES,
+  SUBMIT,
+} from "../../config/constants";
+import { House, HouseImage } from "../../config/prisma";
 import { MyContext, MyConversation } from "../../types";
+import bot from "../../config/botConfig";
+import {
+  housePostBuilder,
+  housePostWithStatusBuilder,
+} from "../../utils/housepost";
 
 export async function rentHouseConversation(
   conversation: MyConversation,
@@ -33,7 +45,11 @@ export async function rentHouseConversation(
   await ctx.reply("woreda / specific", {
     reply_markup: cancelKeyboard,
   });
-  const woreda = await conversation.form.text();
+  const woredaOrSpecificPlace = await conversation.form.text();
+  await ctx.reply("property type", {
+    reply_markup: cancelKeyboard,
+  });
+  const propertyType = await conversation.form.text();
 
   await ctx.reply("Area squre meter in number");
   const area = await conversation.form.number(
@@ -61,15 +77,15 @@ export async function rentHouseConversation(
     {
       type: "photo",
       media: imgArray[0] as string,
-      parse_mode: "MarkdownV2",
-      caption: `
-       *Subcity : * ${subCity}
-      *woreds : *  ${woreda}
-      *area : *     ${area}
-      *Number of bedroom : * ${numberOfBedrooms}
-      *Number of bathroom : * ${numberOfBathrooms}
-      *Price : * ${priceOfTheHouse}
-      `,
+      parse_mode: "HTML",
+      caption: housePostBuilder({
+        area,
+        numberOfBathrooms,
+        numberOfBedrooms,
+        priceOfTheHouse,
+        subCity,
+        woredaOrSpecificPlace,
+      }),
     },
     {
       type: "photo",
@@ -85,11 +101,74 @@ export async function rentHouseConversation(
   });
   const cbData = await conversation.waitFor("callback_query:data");
   if (cbData.callbackQuery.data == SUBMIT) {
+    const house = await House.create({
+      data: {
+        numberOfBathrooms,
+        numberOfBedrooms,
+        subCity,
+        userTelegramID: String(ctx.from?.id),
+        woredaOrSpecificPlace,
+        area,
+        propertyType,
+        housePostType: HousePostType.RENT,
+        price: priceOfTheHouse,
+      },
+    });
+    for (let i = 0; i < 3; i++) {
+      await HouseImage.create({
+        data: {
+          houseId: house.id,
+          image: imgArray[i] as string,
+          // houseID: house.id,
+          // imageID: messagId[i],
+        },
+      });
+    }
     await ctx.reply("Successfully submitted the house wait for a review", {
       reply_markup: brokerMainMenuKeyboard,
     });
-  } else {
-    await ctx.reply("Submission cancled ", {
+    const message = await bot.api.sendMediaGroup(ADMIN_TELEGRAM_ID, [
+      {
+        type: "photo",
+        media: imgArray[0] as string,
+        parse_mode: "HTML",
+        caption: housePostWithStatusBuilder(house.status, {
+          area,
+          numberOfBathrooms,
+          numberOfBedrooms,
+          priceOfTheHouse,
+          subCity,
+          woredaOrSpecificPlace,
+        }),
+      },
+      {
+        type: "photo",
+        media: imgArray[1] as string,
+      },
+      {
+        type: "photo",
+        media: imgArray[2] as string,
+      },
+    ]);
+    await bot.api.sendMessage(ADMIN_TELEGRAM_ID, "confirm", {
+      reply_markup: {
+        inline_keyboard: [
+          [
+            {
+              callback_data: `/house/approve/${house.id}`,
+              text: "Approve",
+            },
+            {
+              callback_data: `/house/reject/${house.id}`,
+              text: "Reject",
+            },
+          ],
+        ],
+      },
+    });
+    return;
+  } else if (cbData.callbackQuery.data == CANCEL) {
+    await ctx.reply("Submission cancled 2", {
       reply_markup: brokerMainMenuKeyboard,
     });
   }
