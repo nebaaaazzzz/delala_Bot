@@ -1,5 +1,9 @@
 import bot from "../../config/botConfig";
-import { ADMIN_TELEGRAM_ID, CHANNEL_ID } from "../../config/constants";
+import {
+  ADMIN_PHONE_NUMBER,
+  ADMIN_TELEGRAM_ID,
+  CHANNEL_ID,
+} from "../../config/constants";
 import { House, HouseImage } from "../../config/prisma";
 import { MyContext } from "../../types";
 import {
@@ -10,101 +14,24 @@ const BOT_ID = "delalaet_bot";
 // approve house
 
 export const approveHouse = async (ctx: MyContext) => {
-  const messageId = ctx.callbackQuery?.message?.message_id;
-  //["" , "house" , "page" , "param"]
-  if (ctx?.callbackQuery?.data) {
-    const splittedPath = ctx.callbackQuery?.data.split("/");
-    const houseId = Number(splittedPath[3]);
-
-    //approve the house
-    const house = await House.update({
-      where: {
-        id: houseId,
-      },
-      include: {
-        user: true,
-      },
-      data: {
-        status: "APPROVED",
-      },
-    });
-    const houseImages = await HouseImage.findMany({
-      where: {
-        houseId: house.id,
-      },
-    });
-    //post to the channel approved house
-    const message = await bot.api.sendMediaGroup(CHANNEL_ID, [
-      {
-        type: "photo",
-        media: houseImages[0].image as string,
-        parse_mode: "HTML",
-        caption: housePostBuilder({
-          area: house.area,
-          numberOfBathrooms: house.numberOfBathrooms,
-          numberOfBedrooms: house.numberOfBedrooms,
-          priceOfTheHouse: house.price,
-          subCity: house.subCity,
-          woredaOrSpecificPlace: house.woredaOrSpecificPlace,
-        }),
-      },
-      {
-        type: "photo",
-        media: houseImages[0].image as string,
-      },
-      {
-        type: "photo",
-        media: houseImages[0].image as string,
-      },
-    ]);
-    //update the message to show new status for the admin
-    // await bot.api.editMessageCaption(ADMIN_TELEGRAM_ID, messageId as number, {
-    //   caption: `
-    //   ///////////////${house.status}////////////
-    //   *Subcity : * ${house.subCity}
-    //    *woreds : *  ${house.woredaOrSpecificPlace}
-    //    *area : *     ${house.area}
-    //    *Number of bedroom : * ${house.numberOfBedrooms}
-    //    *Number of bathroom : * ${house.numberOfBathrooms}
-    //    *House Post type : * ${house.housePostType}
-    //    *Price : * ${house.price}`,
-    // });
-
-    //send to the user the house is posted
-    await bot.api.sendMediaGroup(house.user.telegramId, [
-      {
-        type: "photo",
-        media: houseImages[0].image as string,
-        parse_mode: "HTML",
-        caption: housePostWithStatusBuilder(house.status, {
-          area: house.area,
-          numberOfBathrooms: house.numberOfBathrooms,
-          numberOfBedrooms: house.numberOfBedrooms,
-          priceOfTheHouse: house.price,
-          subCity: house.subCity,
-          woredaOrSpecificPlace: house.woredaOrSpecificPlace,
-        }),
-      },
-      {
-        type: "photo",
-        media: houseImages[0].image as string,
-      },
-      {
-        type: "photo",
-        media: houseImages[0].image as string,
-      },
-    ]);
-  }
+  await handleApproval(ctx, "APPROVED");
 };
 
 //reject house
 export const rejectHouse = async (ctx: MyContext) => {
-  const messageId = ctx.callbackQuery?.message?.message_id;
+  await handleApproval(ctx, "REJECTED");
+};
 
-  if (ctx.callbackQuery?.data) {
-    //["" , "house" , "page" , "param"]
-    const splittedPath = ctx.callbackQuery.data.split("/");
+async function handleApproval(ctx: MyContext, status: "APPROVED" | "REJECTED") {
+  await ctx.answerCallbackQuery();
+  const messageId = ctx.message?.message_id;
+  //["" , "house" , "page" , "param"]
+  if (ctx?.callbackQuery?.data) {
+    const splittedPath = ctx.callbackQuery?.data.split("/");
     const houseId = Number(splittedPath[3]);
+    const captionId = Number(splittedPath[4]);
+
+    // approve the house
     const house = await House.update({
       where: {
         id: houseId,
@@ -113,7 +40,7 @@ export const rejectHouse = async (ctx: MyContext) => {
         user: true,
       },
       data: {
-        status: "REJECTED",
+        status: status,
       },
     });
     const houseImages = await HouseImage.findMany({
@@ -122,16 +49,54 @@ export const rejectHouse = async (ctx: MyContext) => {
       },
     });
     //update the message to show new status for the admin
-    // await bot.api.editMessageCaption(BOT_ID, messageId as number, {
-    //   caption: housePostWithStatusBuilder(house.status, {
-    //     area: house.area,
-    //     numberOfBathrooms: house.numberOfBathrooms,
-    //     numberOfBedrooms: house.numberOfBedrooms,
-    //     priceOfTheHouse: house.price,
-    //     subCity: house.subCity,
-    //     woredaOrSpecificPlace: house.woredaOrSpecificPlace,
-    //   }),
-    // });
+    try {
+      await bot.api.editMessageCaption(ADMIN_TELEGRAM_ID, captionId, {
+        caption: housePostWithStatusBuilder(house.status, {
+          area: house.area,
+          numberOfBathrooms: house.numberOfBathrooms,
+          numberOfBedrooms: house.numberOfBedrooms,
+          priceOfTheHouse: house.price,
+          subCity: house.subCity,
+          woredaOrSpecificPlace: house.woredaOrSpecificPlace,
+          housePostType: house.housePostType,
+          propertyType: house.propertyType,
+        }),
+      });
+    } catch (e: any) {
+      console.log(e.message);
+    }
+    //post to the channel approved house
+    if (status === "APPROVED") {
+      await bot.api.sendMediaGroup(CHANNEL_ID, [
+        {
+          type: "photo",
+          media: houseImages[0].image as string,
+          parse_mode: "HTML",
+          caption:
+            housePostBuilder({
+              area: house.area,
+              numberOfBathrooms: house.numberOfBathrooms,
+              numberOfBedrooms: house.numberOfBedrooms,
+              priceOfTheHouse: house.price,
+              subCity: house.subCity,
+              woredaOrSpecificPlace: house.woredaOrSpecificPlace,
+              housePostType: house.housePostType,
+              propertyType: house.propertyType,
+            }) +
+            `
+            <b>Contact </b>: ${ADMIN_PHONE_NUMBER}
+          `,
+        },
+        {
+          type: "photo",
+          media: houseImages[0].image as string,
+        },
+        {
+          type: "photo",
+          media: houseImages[0].image as string,
+        },
+      ]);
+    }
 
     //send to the user the house is posted
     await bot.api.sendMediaGroup(house.user.telegramId, [
@@ -146,6 +111,8 @@ export const rejectHouse = async (ctx: MyContext) => {
           priceOfTheHouse: house.price,
           subCity: house.subCity,
           woredaOrSpecificPlace: house.woredaOrSpecificPlace,
+          housePostType: house.housePostType,
+          propertyType: house.propertyType,
         }),
       },
       {
@@ -158,4 +125,4 @@ export const rejectHouse = async (ctx: MyContext) => {
       },
     ]);
   }
-};
+}

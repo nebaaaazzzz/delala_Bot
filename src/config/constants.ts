@@ -6,6 +6,7 @@ export const LANGUAGES = [EN_LANGUAGE, AM_LANGUAGE];
 export const USERS = [BROKER, HOME_SEEKER];
 export const SETTING = "setting";
 export const CANCEL = "cancel";
+
 export const SUBCITIES = [
   "Addis Ketema",
   "Akaki Kaliti",
@@ -30,6 +31,7 @@ export const PROPERTY_TYPES = [
 export const REQUEST_HOUSE = "Request House";
 export const ADMIN_TELEGRAM_ID = 430099839; //admin chat id
 export const ADMIN_TELEGRAM_USERNAME = "Nebaaaazzzz";
+export const ADMIN_PHONE_NUMBER = "+251923989471";
 export const CHANNEL_ID = -1001968013940;
 export const SELL_HOUSE = "Sell House";
 export const RENT_HOUSE = "Rent house";

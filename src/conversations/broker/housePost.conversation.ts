@@ -35,6 +35,7 @@ export async function housePostConversation(
   ctx: MyContext,
   housePostType: HousePostType
 ) {
+  let message;
   let imgArray = [];
   const IMG_SIZE = 3;
   for (; imgArray.length < 3; ) {
@@ -116,7 +117,7 @@ export async function housePostConversation(
   });
   //**end price  */
 
-  await ctx.replyWithMediaGroup([
+  message = await ctx.replyWithMediaGroup([
     {
       type: "photo",
       media: imgArray[0] as string,
@@ -129,6 +130,7 @@ export async function housePostConversation(
         subCity,
         woredaOrSpecificPlace,
         propertyType,
+        housePostType,
       }),
     },
     {
@@ -141,7 +143,11 @@ export async function housePostConversation(
     },
   ]);
   await ctx.reply("confirmation to submit the house", {
-    reply_markup: confirmHousePostInlineKeyboard,
+    reply_to_message_id: message[0].message_id,
+    reply_markup: {
+      inline_keyboard: confirmHousePostInlineKeyboard,
+      remove_keyboard: true,
+    },
   });
   const cbData = await conversation.waitFor("callback_query:data");
   let submitted = cbData.callbackQuery.data == SUBMIT;
@@ -172,7 +178,7 @@ export async function housePostConversation(
     await ctx.reply("Successfully submitted the house wait for a review", {
       reply_markup: brokerMainMenuKeyboard,
     });
-    const message = await bot.api.sendMediaGroup(ADMIN_TELEGRAM_ID, [
+    message = await bot.api.sendMediaGroup(ADMIN_TELEGRAM_ID, [
       {
         type: "photo",
         media: imgArray[0] as string,
@@ -185,6 +191,7 @@ export async function housePostConversation(
           subCity,
           woredaOrSpecificPlace,
           propertyType,
+          housePostType,
         }),
       },
       {
@@ -197,15 +204,16 @@ export async function housePostConversation(
       },
     ]);
     await bot.api.sendMessage(ADMIN_TELEGRAM_ID, "confirm", {
+      reply_to_message_id: message[0].message_id,
       reply_markup: {
         inline_keyboard: [
           [
             {
-              callback_data: `/house/approve/${house.id}`,
+              callback_data: `/house/approve/${house.id}/${message[0].message_id}`,
               text: "Approve",
             },
             {
-              callback_data: `/house/reject/${house.id}`,
+              callback_data: `/house/reject/${house.id}/${message[0].message_id}`,
               text: "Reject",
             },
           ],

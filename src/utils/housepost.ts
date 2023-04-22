@@ -7,6 +7,7 @@ export function housePostBuilder({
   numberOfBathrooms,
   priceOfTheHouse,
   propertyType,
+  housePostType,
 }: {
   subCity: string;
   woredaOrSpecificPlace: string;
@@ -15,6 +16,7 @@ export function housePostBuilder({
   numberOfBathrooms: number;
   priceOfTheHouse: number;
   propertyType: string;
+  housePostType: string;
 }): string {
   return `
  <b>Subcity : </b> ${subCity}
@@ -24,6 +26,7 @@ export function housePostBuilder({
 <b>Number of bathroom : </b> ${numberOfBathrooms}
 <b>Price : </b> ${priceOfTheHouse}
 <b>Property type</b> ${propertyType},
+<b>house post type</b> ${housePostType}
 `;
 }
 
@@ -37,6 +40,7 @@ export function housePostWithStatusBuilder(
     numberOfBathrooms,
     priceOfTheHouse,
     propertyType,
+    housePostType,
   }: {
     subCity: string;
     woredaOrSpecificPlace: string;
@@ -45,6 +49,7 @@ export function housePostWithStatusBuilder(
     numberOfBathrooms: number;
     priceOfTheHouse: number;
     propertyType: string;
+    housePostType: string;
   }
 ): string {
   return `
@@ -57,6 +62,7 @@ export function housePostWithStatusBuilder(
          numberOfBathrooms,
          priceOfTheHouse,
          propertyType,
+         housePostType,
        })}
       `;
 }

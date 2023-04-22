@@ -12,4 +12,4 @@ export const confirmHousePostInlineKeyboard = new InlineKeyboard([
       callback_data: SUBMIT,
     },
   ],
-]);
+]).inline_keyboard;
