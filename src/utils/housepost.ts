@@ -9,7 +9,7 @@ export function housePostBuilder({
 }: {
   subCity: string;
   woredaOrSpecificPlace: string;
-  area: number;
+  area: string;
   numberOfBedrooms: number;
   numberOfBathrooms: number;
   priceOfTheHouse: number;
@@ -36,7 +36,7 @@ export function housePostWithStatusBuilder(
   }: {
     subCity: string;
     woredaOrSpecificPlace: string;
-    area: number;
+    area: string;
     numberOfBedrooms: number;
     numberOfBathrooms: number;
     priceOfTheHouse: number;

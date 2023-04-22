@@ -7,4 +7,5 @@ export const {
   house: House,
   houseImage: HouseImage,
   session: Session,
+  houseRequest: HouseRequest,
 } = prisma;

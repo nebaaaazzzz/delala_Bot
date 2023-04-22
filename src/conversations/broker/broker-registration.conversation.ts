@@ -1,9 +1,9 @@
 import {
   brokerMainMenuKeyboard,
   sharePhoneKeyboard,
-} from "../components/keyboards";
-import { SUBCITIES } from "../config/constants";
-import { MyContext, MyConversation } from "../types";
+} from "../../components/keyboards";
+import { SUBCITIES } from "../../config/constants";
+import { MyContext, MyConversation } from "../../types";
 
 export default async function brokerRegistration(
   conversation: MyConversation,

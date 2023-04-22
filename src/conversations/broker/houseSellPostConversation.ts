@@ -5,7 +5,12 @@ import {
   cancelKeyboard,
   selectSubCityKeyboardWithCancle,
 } from "../../components/keyboards";
-import { ADMIN_TELEGRAM_ID, SUBCITIES, SUBMIT } from "../../config/constants";
+import {
+  ADMIN_TELEGRAM_ID,
+  CANCEL,
+  SUBCITIES,
+  SUBMIT,
+} from "../../config/constants";
 import { House, HouseImage } from "../../config/prisma";
 import { MyContext, MyConversation } from "../../types";
 import bot from "../../config/botConfig";
@@ -13,8 +18,17 @@ import {
   housePostBuilder,
   housePostWithStatusBuilder,
 } from "../../utils/housepost";
-
-export async function sellHouseConversation(
+import { Conversation, ConversationFn } from "@grammyjs/conversations";
+async function handleCancel(ctx: MyContext) {
+  if (ctx.message?.text == CANCEL) {
+    await ctx.reply("Canceled");
+    await ctx.reply("Main menu", {
+      reply_markup: brokerMainMenuKeyboard,
+    });
+    return await ctx.conversation.exit();
+  }
+}
+export async function houseSellPostConversation(
   conversation: MyConversation,
   ctx: MyContext
 ) {
@@ -27,47 +41,55 @@ export async function sellHouseConversation(
         reply_markup: cancelKeyboard,
       }
     );
-    const img = await conversation.waitFor(":photo");
+    const img = await conversation.waitFor(":photo", {
+      otherwise: async (ctx) => {
+        return await handleCancel(ctx);
+      },
+    });
     imgArray.push(img.message?.photo[0].file_id);
   }
   await ctx.reply("Select subcity of the house", {
     reply_markup: selectSubCityKeyboardWithCancle,
   });
-  const subCity = await conversation.form.select(
-    SUBCITIES,
-    async (ctx) => await ctx.reply("Please select subcity of the house")
-  );
+  const subCity = await conversation.form.select(SUBCITIES, async (ctx) => {
+    await handleCancel(ctx);
+  });
   await ctx.reply("woreda / specific", {
     reply_markup: cancelKeyboard,
   });
-  const woredaOrSpecificPlace = await conversation.form.text();
+  const woredaOrSpecificPlace = await conversation.form.text(async (ctx) => {});
+  await handleCancel(ctx);
   await ctx.reply("property type", {
     reply_markup: cancelKeyboard,
   });
-  const propertyType = await conversation.form.text();
+
+  const propertyType = await conversation.form.text(async (ctx) => {
+    return await handleCancel(ctx);
+  });
+  await handleCancel(ctx);
 
   await ctx.reply("Area squre meter in number");
-  const area = await conversation.form.number(
-    async (ctx) => await ctx.reply("Please enter area in number")
-  );
+  const area = await conversation.form.number(async (ctx) => {
+    return await handleCancel(ctx);
+  });
   await ctx.reply("Number of bedrooms in number", {
     reply_markup: cancelKeyboard,
   });
-  const numberOfBedrooms = await conversation.form.number(
-    async (ctx) => await ctx.reply("Please enter number of bedrooms in number")
-  );
+  const numberOfBedrooms = await conversation.form.number(async (ctx) => {
+    return await handleCancel(ctx);
+  });
   await ctx.reply("number of bathrooms in number", {
     reply_markup: cancelKeyboard,
   });
-  const numberOfBathrooms = await conversation.form.number(
-    async (ctx) => await ctx.reply("Please enter number of bathrooms in number")
-  );
+  const numberOfBathrooms = await conversation.form.number(async (ctx) => {
+    return await handleCancel(ctx);
+  });
   await ctx.reply("price of the house", {
     reply_markup: cancelKeyboard,
   });
-  const priceOfTheHouse = await conversation.form.number(
-    async (ctx) => await ctx.reply("Please enter number of bathrooms in number")
-  );
+  const priceOfTheHouse = await conversation.form.number(async (ctx) => {
+    return await handleCancel(ctx);
+  });
   await ctx.replyWithMediaGroup([
     {
       type: "photo",
@@ -162,10 +184,9 @@ export async function sellHouseConversation(
       },
     });
     return;
-  } else {
-    await ctx.reply("Submission cancled 1", {
+  } else if (cbData.callbackQuery.data == CANCEL) {
+    await ctx.reply("Submission cancled", {
       reply_markup: brokerMainMenuKeyboard,
     });
-    return;
   }
 }

@@ -76,7 +76,7 @@ export const approveHouse = async (ctx: MyContext) => {
         type: "photo",
         media: houseImages[0].image as string,
         parse_mode: "HTML",
-        caption: housePostBuilder({
+        caption: housePostWithStatusBuilder(house.status, {
           area: house.area,
           numberOfBathrooms: house.numberOfBathrooms,
           numberOfBedrooms: house.numberOfBedrooms,
