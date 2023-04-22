@@ -7,6 +7,7 @@ import {
   CANCEL,
   EN_LANGUAGE,
   HOME_SEEKER,
+  MY_HOUSES,
   PROPERTY_TYPES,
   RENT_HOUSE,
   REQUEST_HOUSE,
@@ -57,10 +58,13 @@ export const brokerMainMenuKeyboard = new Keyboard([
       text: SETTING,
     },
     {
-      text: ABOUT_US,
+      text: MY_HOUSES,
     },
   ],
   [
+    {
+      text: ABOUT_US,
+    },
     {
       text: TERMS_OF_USE,
     },

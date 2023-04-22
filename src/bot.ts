@@ -1,5 +1,5 @@
 dotenv.config();
-import { session } from "grammy";
+import { lazySession, session } from "grammy";
 import { conversations } from "@grammyjs/conversations";
 import dotenv from "dotenv";
 import { PrismaAdapter } from "@grammyjs/storage-prisma";
@@ -13,8 +13,8 @@ import home_seekerRoutes from "./router/home_seeker.routes";
 import loginRoutes from "./router/login.routes";
 import { NOT_REGISTERD } from "./config/constants";
 bot.use(
-  session({
-    initial: () => ({}),
+  lazySession({
+    initial: () => ({ pageNumber: 1 }),
     getSessionKey: (ctx) => String(ctx.from?.id),
     storage: new PrismaAdapter(Session),
   })
@@ -31,7 +31,7 @@ bot.start({
   },
 });
 
-//THIS CODE TO DET CHALLE ID
+//THIS CODE TO GET CHALLE ID
 // bot.on("channel_post", async (ctx) => {
 //   console.log(ctx.chat.id);
 // });

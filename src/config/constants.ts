@@ -38,7 +38,7 @@ export const RENT_HOUSE = "Rent house";
 export const BUY_HOUSE = "Buy house";
 export const ABOUT_US = "About Us";
 export const TERMS_OF_USE = "Terms of Use";
-
+export const MY_HOUSES = "My Houses";
 /* house types */
 
 export const SUBMIT = "Submit";

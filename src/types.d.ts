@@ -1,7 +1,12 @@
+import { type Context, type LazySessionFlavor } from "grammy";
 import {
-  type Conversation,
   type ConversationFlavor,
+  type Conversation,
 } from "@grammyjs/conversations";
-import { Context } from "grammy";
-export type MyContext = Context & ConversationFlavor;
-export type MyConversation = Conversation<MyContext>;
+
+interface SessionData {
+  pageNumber: number;
+}
+
+type MyContext = Context & ConversationFlavor & LazySessionFlavor<SessionData>;
+type MyConversation = Conversation<MyContext>;
