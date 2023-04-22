@@ -1,4 +1,9 @@
-import { ADMIN_TELEGRAM_ID, BROKERS, HOME_SEEKERS } from "../config/constants";
+import {
+  ADMIN_TELEGRAM_ID,
+  BROKERS,
+  HOME_SEEKERS,
+  HOUSES,
+} from "../config/constants";
 import { approveHouse, rejectHouse } from "../handler/admin/house-approval";
 import { MyContext } from "../types";
 import { Composer } from "grammy";
@@ -8,6 +13,7 @@ import {
 } from "../utils/admin/home-seekerPagination";
 import { getBrokers, paginateBroker } from "../utils/admin/brokerPagination";
 import { adminKeyboard } from "../components/keyboards";
+import { getHouses, paginateHouses } from "../utils/admin/housePagination";
 
 export default function (adminRouter: Composer<MyContext>) {
   adminRouter.callbackQuery(/^(\/house\/approve\/.+)/gi, approveHouse);
@@ -22,4 +28,7 @@ export default function (adminRouter: Composer<MyContext>) {
 
   adminRouter.hears(HOME_SEEKERS, getHomeSeekers);
   adminRouter.callbackQuery(/^(\/home-seeker\/page\/.+)/gi, paginateHomeSeeker);
+
+  adminRouter.hears(HOUSES, getHouses);
+  adminRouter.callbackQuery(/^(\/houses\/page\/.+)/gi, paginateHouses);
 }

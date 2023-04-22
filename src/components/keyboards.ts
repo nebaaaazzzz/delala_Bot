@@ -9,6 +9,7 @@ import {
   EN_LANGUAGE,
   HOME_SEEKER,
   HOME_SEEKERS,
+  HOUSES,
   MY_HOUSES,
   PROPERTY_TYPES,
   RENT_HOUSE,
@@ -129,8 +130,15 @@ export const adminKeyboard = new Keyboard([
     {
       text: BROKERS,
     },
+  ],
+  [
     {
       text: HOME_SEEKERS,
+    },
+  ],
+  [
+    {
+      text: HOUSES,
     },
   ],
 ]).resized(true);

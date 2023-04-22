@@ -27,7 +27,10 @@ export const paginateHomeSeeker = async (ctx: MyContext) => {
       const homeseeker = homeseekers[currentPageNumber - 1];
       const inlineKeyboard = new InlineKeyboard();
       if (currentPageNumber > 1) {
-        inlineKeyboard.add({ text: `«1`, callback_data: `/broker/page/1` });
+        inlineKeyboard.add({
+          text: `«1`,
+          callback_data: `/home-seeker/page/1`,
+        });
       }
       if (currentPageNumber > 2) {
         inlineKeyboard.add({
