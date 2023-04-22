@@ -48,6 +48,9 @@ _export(exports, {
     ADMIN_TELEGRAM_USERNAME: function() {
         return ADMIN_TELEGRAM_USERNAME;
     },
+    ADMIN_PHONE_NUMBER: function() {
+        return ADMIN_PHONE_NUMBER;
+    },
     CHANNEL_ID: function() {
         return CHANNEL_ID;
     },
@@ -65,6 +68,9 @@ _export(exports, {
     },
     TERMS_OF_USE: function() {
         return TERMS_OF_USE;
+    },
+    MY_HOUSES: function() {
+        return MY_HOUSES;
     },
     SUBMIT: function() {
         return SUBMIT;
@@ -111,11 +117,13 @@ const PROPERTY_TYPES = [
 const REQUEST_HOUSE = "Request House";
 const ADMIN_TELEGRAM_ID = 430099839; //admin chat id
 const ADMIN_TELEGRAM_USERNAME = "Nebaaaazzzz";
+const ADMIN_PHONE_NUMBER = "+251923989471";
 const CHANNEL_ID = -1001968013940;
 const SELL_HOUSE = "Sell House";
 const RENT_HOUSE = "Rent house";
 const BUY_HOUSE = "Buy house";
 const ABOUT_US = "About Us";
 const TERMS_OF_USE = "Terms of Use";
+const MY_HOUSES = "My Houses";
 const SUBMIT = "Submit";
 const NOT_REGISTERD = "NOT_REGISTED";

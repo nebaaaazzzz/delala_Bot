@@ -76,10 +76,13 @@ const brokerMainMenuKeyboard = new _grammy.Keyboard([
             text: _constants.SETTING
         },
         {
-            text: _constants.ABOUT_US
+            text: _constants.MY_HOUSES
         }
     ],
     [
+        {
+            text: _constants.ABOUT_US
+        },
         {
             text: _constants.TERMS_OF_USE
         }

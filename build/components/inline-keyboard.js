@@ -21,4 +21,4 @@ const confirmHousePostInlineKeyboard = new _grammy.InlineKeyboard([
             callback_data: _constants.SUBMIT
         }
     ]
-]);
+]).inline_keyboard;

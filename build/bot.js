@@ -21,8 +21,10 @@ function _interop_require_default(obj) {
     };
 }
 _dotenv.default.config();
-_botConfig.default.use((0, _grammy.session)({
-    initial: ()=>({}),
+_botConfig.default.use((0, _grammy.lazySession)({
+    initial: ()=>({
+            pageNumber: 1
+        }),
     getSessionKey: (ctx)=>String(ctx.from?.id),
     storage: new _storageprisma.PrismaAdapter(_prisma.Session)
 }));
@@ -36,7 +38,7 @@ _botConfig.default.start({
     onStart (botInfo) {
         console.log("Started on :", botInfo.username);
     }
-}); //THIS CODE TO DET CHALLE ID
+}); //THIS CODE TO GET CHALLE ID
  // bot.on("channel_post", async (ctx) => {
  //   console.log(ctx.chat.id);
  // });
