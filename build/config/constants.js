@@ -72,6 +72,12 @@ _export(exports, {
     MY_HOUSES: function() {
         return MY_HOUSES;
     },
+    BROKERS: function() {
+        return BROKERS;
+    },
+    HOME_SEEKERS: function() {
+        return HOME_SEEKERS;
+    },
     SUBMIT: function() {
         return SUBMIT;
     },
@@ -125,5 +131,7 @@ const BUY_HOUSE = "Buy house";
 const ABOUT_US = "About Us";
 const TERMS_OF_USE = "Terms of Use";
 const MY_HOUSES = "My Houses";
+const BROKERS = "Brokers";
+const HOME_SEEKERS = "Home Seekers";
 const SUBMIT = "Submit";
 const NOT_REGISTERD = "NOT_REGISTED";

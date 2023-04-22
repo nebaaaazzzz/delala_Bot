@@ -40,6 +40,7 @@ export const ABOUT_US = "About Us";
 export const TERMS_OF_USE = "Terms of Use";
 export const MY_HOUSES = "My Houses";
 /* house types */
-
+export const BROKERS = "Brokers";
+export const HOME_SEEKERS = "Home Seekers";
 export const SUBMIT = "Submit";
 export const NOT_REGISTERD = "NOT_REGISTED";

@@ -3,10 +3,12 @@ import {
   ABOUT_US,
   AM_LANGUAGE,
   BROKER,
+  BROKERS,
   BUY_HOUSE,
   CANCEL,
   EN_LANGUAGE,
   HOME_SEEKER,
+  HOME_SEEKERS,
   MY_HOUSES,
   PROPERTY_TYPES,
   RENT_HOUSE,
@@ -92,13 +94,13 @@ export const homeSeekerMainMenuKeyboard = new Keyboard([
 ]).resized(true);
 export const selectSubCityKeyboard = new Keyboard(
   SUBCITIES.map((subCity) => [{ text: subCity }])
-);
+).resized(true);
 export const selectSubCityKeyboardWithCancle = new Keyboard(
   [...SUBCITIES, CANCEL].map((subCity) => [{ text: subCity }])
-);
+).resized(true);
 export const selectPropertyKeyboardWithCancle = new Keyboard(
   [...PROPERTY_TYPES, CANCEL].map((subCity) => [{ text: subCity }])
-);
+).resized(true);
 export const selectRequestTypeKeyboardWithCancel = new Keyboard(
   [RENT_HOUSE, BUY_HOUSE, CANCEL].map((type) => [{ text: type }])
 ).resized(true);
@@ -121,4 +123,14 @@ export const selectLanguageKeyboard = new Keyboard([
       text: AM_LANGUAGE,
     },
   ],
-]).resized();
+]).resized(true);
+export const adminKeyboard = new Keyboard([
+  [
+    {
+      text: BROKERS,
+    },
+    {
+      text: HOME_SEEKERS,
+    },
+  ],
+]).resized(true);

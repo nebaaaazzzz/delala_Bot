@@ -14,7 +14,11 @@ import loginRoutes from "./router/login.routes";
 import { NOT_REGISTERD } from "./config/constants";
 bot.use(
   lazySession({
-    initial: () => ({ pageNumber: 1 }),
+    initial: () => ({
+      pageNumber: 1,
+      adminUserPageNumber: 1,
+      adminBrokerPageNumber: 1,
+    }),
     getSessionKey: (ctx) => String(ctx.from?.id),
     storage: new PrismaAdapter(Session),
   })
@@ -30,7 +34,6 @@ bot.start({
     console.log("Started on :", botInfo.username);
   },
 });
-
 //THIS CODE TO GET CHALLE ID
 // bot.on("channel_post", async (ctx) => {
 //   console.log(ctx.chat.id);

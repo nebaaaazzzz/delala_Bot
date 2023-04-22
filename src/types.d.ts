@@ -6,6 +6,8 @@ import {
 
 interface SessionData {
   pageNumber: number;
+  adminUserPageNumber: number;
+  adminBrokerPageNumber: number;
 }
 
 type MyContext = Context & ConversationFlavor & LazySessionFlavor<SessionData>;

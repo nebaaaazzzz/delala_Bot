@@ -23,7 +23,9 @@ function _interop_require_default(obj) {
 _dotenv.default.config();
 _botConfig.default.use((0, _grammy.lazySession)({
     initial: ()=>({
-            pageNumber: 1
+            pageNumber: 1,
+            adminUserPageNumber: 1,
+            adminBrokerPageNumber: 1
         }),
     getSessionKey: (ctx)=>String(ctx.from?.id),
     storage: new _storageprisma.PrismaAdapter(_prisma.Session)

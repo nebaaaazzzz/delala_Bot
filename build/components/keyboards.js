@@ -38,6 +38,9 @@ _export(exports, {
     },
     selectLanguageKeyboard: function() {
         return selectLanguageKeyboard;
+    },
+    adminKeyboard: function() {
+        return adminKeyboard;
     }
 });
 const _grammy = require("grammy");
@@ -112,7 +115,7 @@ const selectSubCityKeyboard = new _grammy.Keyboard(_constants.SUBCITIES.map((sub
         {
             text: subCity
         }
-    ]));
+    ])).resized(true);
 const selectSubCityKeyboardWithCancle = new _grammy.Keyboard([
     ..._constants.SUBCITIES,
     _constants.CANCEL
@@ -120,7 +123,7 @@ const selectSubCityKeyboardWithCancle = new _grammy.Keyboard([
         {
             text: subCity
         }
-    ]));
+    ])).resized(true);
 const selectPropertyKeyboardWithCancle = new _grammy.Keyboard([
     ..._constants.PROPERTY_TYPES,
     _constants.CANCEL
@@ -128,7 +131,7 @@ const selectPropertyKeyboardWithCancle = new _grammy.Keyboard([
         {
             text: subCity
         }
-    ]));
+    ])).resized(true);
 const selectRequestTypeKeyboardWithCancel = new _grammy.Keyboard([
     _constants.RENT_HOUSE,
     _constants.BUY_HOUSE,
@@ -156,4 +159,14 @@ const selectLanguageKeyboard = new _grammy.Keyboard([
             text: _constants.AM_LANGUAGE
         }
     ]
-]).resized();
+]).resized(true);
+const adminKeyboard = new _grammy.Keyboard([
+    [
+        {
+            text: _constants.BROKERS
+        },
+        {
+            text: _constants.HOME_SEEKERS
+        }
+    ]
+]).resized(true);
