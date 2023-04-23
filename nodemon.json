@@ -2,7 +2,7 @@
   "verbose": false,
   "ignore": ["*.test.js"],
   "watch": ["./src"],
-  "ext": "ts",
+  "ext": "ts,ftl",
   "execMap": {
     "js": "swc ./src -d build && node"
   }

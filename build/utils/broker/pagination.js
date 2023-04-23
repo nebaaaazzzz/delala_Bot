@@ -84,7 +84,7 @@ const paginateHouse = async (ctx)=>{
                     reply_markup: inlineKeyboard
                 });
             } else {
-                await ctx.reply("No Posted House to Display");
+                await ctx.reply(ctx.t("no-house-posted"));
             }
         //console.log(houses);
         }

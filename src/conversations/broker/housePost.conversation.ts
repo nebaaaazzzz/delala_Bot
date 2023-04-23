@@ -1,31 +1,25 @@
 import {
-  brokerMainMenuKeyboard,
-  cancelKeyboard,
+  getBrokerMainMenuKeyboard,
+  getCancelKeyboard,
 } from "../../components/keyboards";
+import { ADMIN_TELEGRAM_ID, SUBMIT } from "../../config/constants";
+import { MyContext, MyConversation, SessionData } from "../../types";
 import {
-  ADMIN_TELEGRAM_ID,
-  CANCEL,
-  PROPERTY_TYPES,
-  SUBCITIES,
-  SUBMIT,
-} from "../../config/constants";
-import { MyContext, MyConversation } from "../../types";
-import {
-  selectPropertyKeyboardWithCancle,
-  selectSubCityKeyboardWithCancle,
+  getSelectPropertyTypeKeyboardWithCancel,
+  getSelectSubCityKeyboardWithCancel,
 } from "../../components/keyboards";
 import {
   housePostBuilder,
   housePostWithStatusBuilder,
 } from "../../utils/housepost";
-import { confirmHousePostInlineKeyboard } from "../../components/inline-keyboard";
+import { getConfirmHousePostInlineKeyboard } from "../../components/inline-keyboard";
 import { House, HouseImage } from "../../config/prisma";
 import { HousePostType } from "@prisma/client";
 import bot from "../../config/botConfig";
 async function handleCancelFromCtx(ctx: MyContext) {
-  if (ctx.message?.text == CANCEL) {
-    await ctx.reply("Main menu", {
-      reply_markup: brokerMainMenuKeyboard,
+  if (ctx.message?.text == ctx.t("CANCEL")) {
+    await ctx.reply(ctx.t("mm"), {
+      reply_markup: getBrokerMainMenuKeyboard(ctx),
     });
     return await ctx.conversation.exit();
   }
@@ -40,9 +34,12 @@ export async function housePostConversation(
   const IMG_SIZE = 3;
   for (; imgArray.length < 3; ) {
     await ctx.reply(
-      `Please share ${IMG_SIZE - imgArray.length} photos of the house`,
+      // IMG_SIZE - imgArray.length
+      ctx.t("pls-shr-pic-z-house", {
+        imgLength: IMG_SIZE - imgArray.length,
+      }),
       {
-        reply_markup: cancelKeyboard,
+        reply_markup: getCancelKeyboard(ctx),
       }
     );
     const img = await conversation.waitFor(":photo", {
@@ -52,38 +49,41 @@ export async function housePostConversation(
     });
     imgArray.push(img.message?.photo[0].file_id);
   }
-  await ctx.reply("Select subcity of the house", {
-    reply_markup: selectSubCityKeyboardWithCancle,
+  await ctx.reply(ctx.t("Slct-sub-city-zhouse"), {
+    reply_markup: getSelectSubCityKeyboardWithCancel(ctx),
   });
-  const subCity = await conversation.form.select(SUBCITIES, async (ctx) => {
-    await handleCancelFromCtx(ctx);
-  });
+  const subCity = await conversation.form.select(
+    JSON.parse(ctx.t("SUBCITIES")),
+    async (ctx) => {
+      await handleCancelFromCtx(ctx);
+    }
+  );
 
   //**woreda start */
-  await ctx.reply("woreda / specific", {
-    reply_markup: cancelKeyboard,
+  await ctx.reply(ctx.t("wrda-spcic-loc"), {
+    reply_markup: getCancelKeyboard(ctx),
   });
   const woredaOrSpecificPlace = await conversation.form.text();
-  if (woredaOrSpecificPlace === CANCEL) {
-    await ctx.reply("Main menu", {
-      reply_markup: brokerMainMenuKeyboard,
+  if (woredaOrSpecificPlace === ctx.t("CANCEL")) {
+    await ctx.reply(ctx.t("mm"), {
+      reply_markup: getBrokerMainMenuKeyboard(ctx),
     });
     return;
   }
   //**end woreda  */
 
   //**start property type  */
-  await ctx.reply("property type", {
-    reply_markup: selectPropertyKeyboardWithCancle,
+  await ctx.reply(ctx.t("pprty-type"), {
+    reply_markup: getSelectPropertyTypeKeyboardWithCancel(ctx),
   });
   const propertyType = await conversation.form.select(
-    PROPERTY_TYPES,
+    JSON.parse(ctx.t("PROPERTY_TYPES")),
     async (ctx) => await handleCancelFromCtx(ctx)
   );
   //**end property type  */
 
   //**start area  */
-  await ctx.reply("Area ", {
+  await ctx.reply(ctx.t("area-z-house"), {
     reply_markup: {
       remove_keyboard: true,
     },
@@ -92,16 +92,16 @@ export async function housePostConversation(
   //**end area  */
 
   //**start num of bedroom  */
-  await ctx.reply("Number of bedrooms in number", {
-    reply_markup: cancelKeyboard,
+  await ctx.reply(ctx.t("nmbr-bedrooms"), {
+    reply_markup: getCancelKeyboard(ctx),
   });
   const numberOfBedrooms = await conversation.form.number(async (ctx) => {
     await handleCancelFromCtx(ctx);
   });
 
   //**start num of bathroom  */
-  await ctx.reply("number of bathrooms in number", {
-    reply_markup: cancelKeyboard,
+  await ctx.reply(ctx.t("nmbr-bathrooms"), {
+    reply_markup: getCancelKeyboard(ctx),
   });
   const numberOfBathrooms = await conversation.form.number(async (ctx) => {
     await handleCancelFromCtx(ctx);
@@ -109,8 +109,8 @@ export async function housePostConversation(
   //**end num of bathroom  */
 
   //**start price  */
-  await ctx.reply("price of the house", {
-    reply_markup: cancelKeyboard,
+  await ctx.reply(ctx.t("price-z-house"), {
+    reply_markup: getCancelKeyboard(ctx),
   });
   const priceOfTheHouse = await conversation.form.number(async (ctx) => {
     await handleCancelFromCtx(ctx);
@@ -142,11 +142,11 @@ export async function housePostConversation(
       media: imgArray[2] as string,
     },
   ]);
-  await ctx.reply("confirmation to submit the house", {
+  await ctx.reply(ctx.t("cfirm-submit-house"), {
     reply_to_message_id: message[0].message_id,
     reply_markup: {
-      inline_keyboard: confirmHousePostInlineKeyboard,
       remove_keyboard: true,
+      inline_keyboard: getConfirmHousePostInlineKeyboard(ctx),
     },
   });
   const cbData = await conversation.waitFor("callback_query:data");
@@ -175,8 +175,8 @@ export async function housePostConversation(
         },
       });
     }
-    await ctx.reply("Successfully submitted the house wait for a review", {
-      reply_markup: brokerMainMenuKeyboard,
+    await ctx.reply(ctx.t("success-submit-house"), {
+      reply_markup: getBrokerMainMenuKeyboard(ctx),
     });
     message = await bot.api.sendMediaGroup(ADMIN_TELEGRAM_ID, [
       {
@@ -221,8 +221,8 @@ export async function housePostConversation(
       },
     });
   } else {
-    await ctx.reply("Submission cancled", {
-      reply_markup: brokerMainMenuKeyboard,
+    await ctx.reply(ctx.t("submission-cancle"), {
+      reply_markup: getBrokerMainMenuKeyboard(ctx),
     });
   }
 }

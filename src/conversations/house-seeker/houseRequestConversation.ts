@@ -1,53 +1,37 @@
 import { HouseRequestType } from "@prisma/client";
-import { confirmHousePostInlineKeyboard } from "../../components/inline-keyboard";
+import { getConfirmHousePostInlineKeyboard } from "../../components/inline-keyboard";
 import {
-  cancelKeyboard,
-  homeSeekerMainMenuKeyboard,
-  selectPropertyKeyboardWithCancle,
-  selectRequestTypeKeyboardWithCancel,
-  selectSubCityKeyboardWithCancle,
+  getCancelKeyboard,
+  getHomeSeekerMainMenuKeyboard,
+  getSelectPropertyTypeKeyboardWithCancel,
+  getSelectRequestTypeKeyboardWithCancel,
+  getSelectSubCityKeyboardWithCancel,
 } from "../../components/keyboards";
-import {
-  ADMIN_TELEGRAM_ID,
-  BUY_HOUSE,
-  CANCEL,
-  PROPERTY_TYPES,
-  RENT_HOUSE,
-  SUBCITIES,
-  SUBMIT,
-} from "../../config/constants";
+import { ADMIN_TELEGRAM_ID, CANCEL, SUBMIT } from "../../config/constants";
 import { HouseRequest, User } from "../../config/prisma";
 import { MyContext, MyConversation } from "../../types";
 import bot from "../../config/botConfig";
 import { housePostBuilder } from "../../utils/housepost";
 import { houseRequestBuilder } from "../../utils/houseRequest";
 async function handleCancelFromCtx(ctx: MyContext) {
-  if (ctx.message?.text == CANCEL) {
-    await ctx.reply("Main menu", {
-      reply_markup: homeSeekerMainMenuKeyboard,
+  if (ctx.message?.text == ctx.t("CANCEL")) {
+    await ctx.reply(ctx.t("mm"), {
+      reply_markup: getHomeSeekerMainMenuKeyboard(ctx),
     });
     return await ctx.conversation.exit();
   }
 }
-// async function handleCancel(text:string){
-//   if (text == CANCEL) {
-//     await ctx.reply("Canceled");
-//     await ctx.reply("Main menu", {
-//       reply_markup: brokerMainMenuKeyboard,
-//     });
-//     return await ctx.conversation.exit();
-//   }
-// }
+
 export async function houseRequestConversation(
   conversation: MyConversation,
   ctx: MyContext
 ) {
   // **** choose rent or buy
-  await ctx.reply("rent or buy", {
-    reply_markup: selectRequestTypeKeyboardWithCancel,
+  await ctx.reply(ctx.t("rent-buy"), {
+    reply_markup: getSelectRequestTypeKeyboardWithCancel(ctx),
   });
   const houseRequestType = await conversation.form.select(
-    [BUY_HOUSE, RENT_HOUSE],
+    [ctx.t("BUY_HOUSE"), ctx.t("RENT_HOUSE")],
     async (ctx) => {
       await handleCancelFromCtx(ctx);
     }
@@ -55,85 +39,91 @@ export async function houseRequestConversation(
   //**** end choose rent or buy
 
   // **** choose subcity
-  await ctx.reply("Select subcity of the house", {
-    reply_markup: selectSubCityKeyboardWithCancle,
+  await ctx.reply(ctx.t("Slct-sub-city-zhouse"), {
+    reply_markup: getSelectSubCityKeyboardWithCancel(ctx),
   });
-  const subCity = await conversation.form.select(SUBCITIES, async (ctx) => {
-    await handleCancelFromCtx(ctx);
-  });
+  const subCity = await conversation.form.select(
+    JSON.parse(ctx.t("SUBCITIES")),
+    async (ctx) => {
+      await handleCancelFromCtx(ctx);
+    }
+  );
   // **** end choose subcity
 
   //****enter woreda/specific
-  await ctx.reply("woreda / specific", {
-    reply_markup: cancelKeyboard,
+  await ctx.reply(ctx.t("wrda-spcic-loc"), {
+    reply_markup: getCancelKeyboard(ctx),
   });
   const woredaOrSpecificPlace = await conversation.form.text();
-  if (woredaOrSpecificPlace === CANCEL) {
-    await ctx.reply("Main menu", {
-      reply_markup: homeSeekerMainMenuKeyboard,
+  if (woredaOrSpecificPlace === ctx.t("CANCEL")) {
+    await ctx.reply(ctx.t("mm"), {
+      reply_markup: getHomeSeekerMainMenuKeyboard(ctx),
     });
     return;
   }
   //****end enter woreda/specific
 
   //*** property type
-  await ctx.reply("property type", {
-    reply_markup: selectPropertyKeyboardWithCancle,
+  await ctx.reply(ctx.t("pprty-type"), {
+    reply_markup: getSelectPropertyTypeKeyboardWithCancel(ctx),
   });
   const propertyType = await conversation.form.select(
-    PROPERTY_TYPES,
+    JSON.parse(ctx.t("PROPERTY_TYPES")),
     async (ctx) => await handleCancelFromCtx(ctx)
   );
   //*** end property type
 
-  await ctx.reply("Area ", {
+  await ctx.reply(ctx.t("area-z-house"), {
     reply_markup: {
       remove_keyboard: true,
     },
   });
-  const area = await conversation.form.text(async (ctx) => {
-    await handleCancelFromCtx(ctx);
-    await ctx.reply("Please enter area ", {
-      reply_markup: {
-        remove_keyboard: true,
-      },
+  const area = await conversation.form.text();
+  if (area === ctx.t("CANCEL")) {
+    await ctx.reply(ctx.t("mm"), {
+      reply_markup: getHomeSeekerMainMenuKeyboard(ctx),
     });
-  });
-  await ctx.reply("Number of bedrooms in number", {
-    reply_markup: cancelKeyboard,
+    return;
+  }
+  await ctx.reply(ctx.t("nmbr-bedrooms"), {
+    reply_markup: getCancelKeyboard(ctx),
   });
   const numberOfBedrooms = await conversation.form.number(async (ctx) => {
     await handleCancelFromCtx(ctx);
   });
-  await ctx.reply("number of bathrooms in number", {
-    reply_markup: cancelKeyboard,
+  await ctx.reply(ctx.t("nmbr-bathrooms"), {
+    reply_markup: getCancelKeyboard(ctx),
   });
   const numberOfBathrooms = await conversation.form.number(async (ctx) => {
     await handleCancelFromCtx(ctx);
   });
-  await ctx.reply("price of the house", {
-    reply_markup: cancelKeyboard,
+  await ctx.reply(ctx.t("price-z-house"), {
+    reply_markup: getCancelKeyboard(ctx),
   });
   const priceOfTheHouse = await conversation.form.number(async (ctx) => {
     await handleCancelFromCtx(ctx);
   });
   await ctx.reply(
-    housePostBuilder({
+    housePostBuilder(ctx, {
       area,
       numberOfBathrooms,
       numberOfBedrooms,
       priceOfTheHouse,
       subCity,
       woredaOrSpecificPlace,
+      housePostType: houseRequestType,
+      propertyType,
     }),
     {
       parse_mode: "HTML",
-      reply_markup: confirmHousePostInlineKeyboard,
+      reply_markup: {
+        inline_keyboard: getConfirmHousePostInlineKeyboard(ctx),
+      },
     }
   );
   const cbData = await conversation.waitFor("callback_query:data");
   if (cbData.callbackQuery.data == SUBMIT) {
-    const house = await HouseRequest.create({
+    await HouseRequest.create({
       data: {
         numberOfBathrooms,
         numberOfBedrooms,
@@ -144,7 +134,7 @@ export async function houseRequestConversation(
         propertyType,
         price: priceOfTheHouse,
         houseRequestType:
-          houseRequestType == "Buy house"
+          houseRequestType == ctx.t("BUY_HOUSE")
             ? HouseRequestType.BUY
             : HouseRequestType.RENT,
       },
@@ -154,12 +144,9 @@ export async function houseRequestConversation(
         telegramId: String(ctx.from?.id),
       },
     });
-    await ctx.reply(
-      "Successfully submitted we will contact you with you requirement",
-      {
-        reply_markup: homeSeekerMainMenuKeyboard,
-      }
-    );
+    await ctx.reply(ctx.t("success-submit-request"), {
+      reply_markup: getHomeSeekerMainMenuKeyboard(ctx),
+    });
     await bot.api.sendMessage(
       ADMIN_TELEGRAM_ID,
       houseRequestBuilder({
@@ -178,8 +165,8 @@ export async function houseRequestConversation(
     );
     return;
   } else if (cbData.callbackQuery.data == CANCEL) {
-    await ctx.reply("Submission cancled", {
-      reply_markup: homeSeekerMainMenuKeyboard,
+    await ctx.reply(ctx.t("submission-cancle"), {
+      reply_markup: getHomeSeekerMainMenuKeyboard(ctx),
     });
   }
 }

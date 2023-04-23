@@ -1,5 +1,5 @@
 export const EN_LANGUAGE = "English";
-export const AM_LANGUAGE = "Amharic";
+export const AM_LANGUAGE = "አማርኛ";
 export const BROKER = "Broker";
 export const HOME_SEEKER = "Home Seeker";
 export const LANGUAGES = [EN_LANGUAGE, AM_LANGUAGE];
@@ -14,8 +14,7 @@ export const SUBCITIES = [
   "Bole",
   "Gulele",
   "Kirkos",
-  "Kolfe",
-  "Keranio",
+  "Kolfe Keranio",
   "Lideta",
   "Nifas Silk-Lafto",
   "Yeka",

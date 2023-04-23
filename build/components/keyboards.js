@@ -9,32 +9,32 @@ function _export(target, all) {
     });
 }
 _export(exports, {
-    selectUserTypeKeyboard: function() {
-        return selectUserTypeKeyboard;
+    getSelectUserTypeKeyboard: function() {
+        return getSelectUserTypeKeyboard;
     },
-    sharePhoneKeyboard: function() {
-        return sharePhoneKeyboard;
+    getSharePhoneKeyboard: function() {
+        return getSharePhoneKeyboard;
     },
-    brokerMainMenuKeyboard: function() {
-        return brokerMainMenuKeyboard;
+    getBrokerMainMenuKeyboard: function() {
+        return getBrokerMainMenuKeyboard;
     },
-    homeSeekerMainMenuKeyboard: function() {
-        return homeSeekerMainMenuKeyboard;
+    getHomeSeekerMainMenuKeyboard: function() {
+        return getHomeSeekerMainMenuKeyboard;
     },
-    selectSubCityKeyboard: function() {
-        return selectSubCityKeyboard;
+    getSelectSubCityKeyboard: function() {
+        return getSelectSubCityKeyboard;
     },
-    selectSubCityKeyboardWithCancle: function() {
-        return selectSubCityKeyboardWithCancle;
+    getSelectSubCityKeyboardWithCancel: function() {
+        return getSelectSubCityKeyboardWithCancel;
     },
-    selectPropertyKeyboardWithCancle: function() {
-        return selectPropertyKeyboardWithCancle;
+    getSelectPropertyTypeKeyboardWithCancel: function() {
+        return getSelectPropertyTypeKeyboardWithCancel;
     },
-    selectRequestTypeKeyboardWithCancel: function() {
-        return selectRequestTypeKeyboardWithCancel;
+    getSelectRequestTypeKeyboardWithCancel: function() {
+        return getSelectRequestTypeKeyboardWithCancel;
     },
-    cancelKeyboard: function() {
-        return cancelKeyboard;
+    getCancelKeyboard: function() {
+        return getCancelKeyboard;
     },
     selectLanguageKeyboard: function() {
         return selectLanguageKeyboard;
@@ -45,109 +45,129 @@ _export(exports, {
 });
 const _grammy = require("grammy");
 const _constants = require("../config/constants");
-const selectUserTypeKeyboard = new _grammy.Keyboard([
-    [
-        {
-            text: _constants.BROKER
-        }
-    ],
-    [
-        {
-            text: _constants.HOME_SEEKER
-        }
-    ]
-]).oneTime(true).resized(true);
-const sharePhoneKeyboard = new _grammy.Keyboard([
-    [
-        {
-            text: "Share Contact",
-            request_contact: true
-        }
-    ]
-]).oneTime(true).resized(true);
-const brokerMainMenuKeyboard = new _grammy.Keyboard([
-    [
-        {
-            text: _constants.SELL_HOUSE
-        },
-        {
-            text: _constants.RENT_HOUSE
-        }
-    ],
-    [
-        {
-            text: _constants.SETTING
-        },
-        {
-            text: _constants.MY_HOUSES
-        }
-    ],
-    [
-        {
-            text: _constants.ABOUT_US
-        },
-        {
-            text: _constants.TERMS_OF_USE
-        }
-    ]
-]).resized(true);
-const homeSeekerMainMenuKeyboard = new _grammy.Keyboard([
-    [
-        {
-            text: _constants.REQUEST_HOUSE
-        }
-    ],
-    [
-        {
-            text: _constants.SETTING
-        },
-        {
-            text: _constants.ABOUT_US
-        }
-    ],
-    [
-        {
-            text: _constants.TERMS_OF_USE
-        }
-    ]
-]).resized(true);
-const selectSubCityKeyboard = new _grammy.Keyboard(_constants.SUBCITIES.map((subCity)=>[
-        {
-            text: subCity
-        }
-    ])).resized(true);
-const selectSubCityKeyboardWithCancle = new _grammy.Keyboard([
-    ..._constants.SUBCITIES,
-    _constants.CANCEL
-].map((subCity)=>[
-        {
-            text: subCity
-        }
-    ])).resized(true);
-const selectPropertyKeyboardWithCancle = new _grammy.Keyboard([
-    ..._constants.PROPERTY_TYPES,
-    _constants.CANCEL
-].map((subCity)=>[
-        {
-            text: subCity
-        }
-    ])).resized(true);
-const selectRequestTypeKeyboardWithCancel = new _grammy.Keyboard([
-    _constants.RENT_HOUSE,
-    _constants.BUY_HOUSE,
-    _constants.CANCEL
-].map((type)=>[
-        {
-            text: type
-        }
-    ])).resized(true);
-const cancelKeyboard = new _grammy.Keyboard([
-    [
-        {
-            text: _constants.CANCEL
-        }
-    ]
-]).resized(true);
+function getSelectUserTypeKeyboard(ctx) {
+    return new _grammy.Keyboard([
+        [
+            {
+                text: ctx.t("BROKER")
+            }
+        ],
+        [
+            {
+                text: ctx.t("HOME_SEEKER,")
+            }
+        ]
+    ]).oneTime(true).resized(true);
+}
+function getSharePhoneKeyboard(ctx) {
+    return new _grammy.Keyboard([
+        [
+            {
+                text: ctx.t("pls-share-yr-ctact"),
+                request_contact: true
+            }
+        ]
+    ]).oneTime(true).resized(true);
+}
+function getBrokerMainMenuKeyboard(ctx) {
+    return new _grammy.Keyboard([
+        [
+            {
+                text: ctx.t("SELL_HOUSE")
+            },
+            {
+                text: ctx.t("RENT_HOUSE")
+            }
+        ],
+        [
+            {
+                text: ctx.t("SETTING")
+            },
+            {
+                text: ctx.t("MY_HOUSES")
+            }
+        ],
+        [
+            {
+                text: ctx.t("ABOUT_US")
+            },
+            {
+                text: ctx.t("TERMS_OF_USE")
+            }
+        ]
+    ]).resized(true);
+}
+function getHomeSeekerMainMenuKeyboard(ctx) {
+    return new _grammy.Keyboard([
+        [
+            {
+                text: ctx.t("REQUEST_HOUSE")
+            }
+        ],
+        [
+            {
+                text: ctx.t("SETTING")
+            },
+            {
+                text: ctx.t("ABOUT_US")
+            }
+        ],
+        [
+            {
+                text: ctx.t("TERMS_OF_USE")
+            }
+        ]
+    ]).resized(true);
+}
+function getSelectSubCityKeyboard(ctx) {
+    return new _grammy.Keyboard([
+        ...JSON.parse(ctx.t("SUBCITIES"))
+    ].map((subCity)=>[
+            {
+                text: subCity
+            }
+        ])).resized(true);
+}
+function getSelectSubCityKeyboardWithCancel(ctx) {
+    return new _grammy.Keyboard([
+        ...JSON.parse(ctx.t("SUBCITIES")),
+        ctx.t("CANCEL")
+    ].map((subCity)=>[
+            {
+                text: subCity
+            }
+        ])).resized(true);
+}
+function getSelectPropertyTypeKeyboardWithCancel(ctx) {
+    return new _grammy.Keyboard([
+        ...JSON.parse(ctx.t("PROPERTY_TYPES")),
+        ctx.t("CANCEL")
+    ].map((property)=>[
+            {
+                text: property
+            }
+        ])).resized(true);
+}
+function getSelectRequestTypeKeyboardWithCancel(ctx) {
+    return new _grammy.Keyboard([
+        ctx.t("RENT_HOUSE"),
+        ctx.t("BUY_HOUSE"),
+        ctx.t("CANCEL")
+    ].map((type)=>[
+            {
+                text: type
+            }
+        ])).resized(true);
+}
+function getCancelKeyboard(ctx) {
+    return new _grammy.Keyboard([
+        [
+            {
+                text: ctx.t("CANCEL")
+            }
+        ]
+    ]).resized(true);
+}
 const selectLanguageKeyboard = new _grammy.Keyboard([
     [
         {
@@ -164,9 +184,16 @@ const adminKeyboard = new _grammy.Keyboard([
     [
         {
             text: _constants.BROKERS
-        },
+        }
+    ],
+    [
         {
             text: _constants.HOME_SEEKERS
+        }
+    ],
+    [
+        {
+            text: _constants.HOUSES
         }
     ]
 ]).resized(true);

@@ -13,9 +13,9 @@ const _keyboards = require("../../components/keyboards");
 const _constants = require("../../config/constants");
 const _prisma = require("../../config/prisma");
 async function handleCancelFromCtx(ctx) {
-    if (ctx.message?.text == _constants.CANCEL) {
-        await ctx.reply("Main menu", {
-            reply_markup: _keyboards.homeSeekerMainMenuKeyboard
+    if (ctx.message?.text == ctx.t("CANCEL")) {
+        await ctx.reply(ctx.t("mm"), {
+            reply_markup: (0, _keyboards.getHomeSeekerMainMenuKeyboard)(ctx)
         });
         return await ctx.conversation.exit();
     }
@@ -37,7 +37,7 @@ async function settingConversation(conversation, ctx) {
         }
     });
     await ctx.reply("successfuly language set", {
-        reply_markup: _keyboards.homeSeekerMainMenuKeyboard
+        reply_markup: (0, _keyboards.getHomeSeekerMainMenuKeyboard)(ctx)
     });
     return;
 }

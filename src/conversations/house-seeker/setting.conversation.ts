@@ -1,15 +1,15 @@
 import { Language } from "@prisma/client";
 import {
-  homeSeekerMainMenuKeyboard,
+  getHomeSeekerMainMenuKeyboard,
   selectLanguageKeyboard,
 } from "../../components/keyboards";
-import { AM_LANGUAGE, CANCEL, EN_LANGUAGE } from "../../config/constants";
+import { AM_LANGUAGE, EN_LANGUAGE } from "../../config/constants";
 import { User } from "../../config/prisma";
 import { MyContext, MyConversation } from "../../types";
 async function handleCancelFromCtx(ctx: MyContext) {
-  if (ctx.message?.text == CANCEL) {
-    await ctx.reply("Main menu", {
-      reply_markup: homeSeekerMainMenuKeyboard,
+  if (ctx.message?.text == ctx.t("CANCEL")) {
+    await ctx.reply(ctx.t("mm"), {
+      reply_markup: getHomeSeekerMainMenuKeyboard(ctx),
     });
     return await ctx.conversation.exit();
   }
@@ -32,7 +32,7 @@ export async function settingConversation(
     },
   });
   await ctx.reply("successfuly language set", {
-    reply_markup: homeSeekerMainMenuKeyboard,
+    reply_markup: getHomeSeekerMainMenuKeyboard(ctx),
   });
   return;
 }

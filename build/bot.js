@@ -15,21 +15,29 @@ const _brokerroutes = /*#__PURE__*/ _interop_require_default(require("./router/b
 const _home_seekerroutes = /*#__PURE__*/ _interop_require_default(require("./router/home_seeker.routes"));
 const _loginroutes = /*#__PURE__*/ _interop_require_default(require("./router/login.routes"));
 const _constants = require("./config/constants");
+const _i18n = require("@grammyjs/i18n");
 function _interop_require_default(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
 }
 _dotenv.default.config();
+const i18n = new _i18n.I18n({
+    defaultLocale: "en",
+    useSession: true,
+    directory: "./src/locales"
+});
 _botConfig.default.use((0, _grammy.lazySession)({
     initial: ()=>({
             pageNumber: 1,
             adminUserPageNumber: 1,
-            adminBrokerPageNumber: 1
+            adminBrokerPageNumber: 1,
+            __language_code: "en"
         }),
     getSessionKey: (ctx)=>String(ctx.from?.id),
     storage: new _storageprisma.PrismaAdapter(_prisma.Session)
 }));
+_botConfig.default.use(i18n);
 _botConfig.default.use((0, _conversations.conversations)());
 _botConfig.default.use(_router.default);
 (0, _adminroutes.default)(_router.default.route(_client.UserType.ADMIN));
@@ -40,13 +48,26 @@ _botConfig.default.start({
     onStart (botInfo) {
         console.log("Started on :", botInfo.username);
     }
-}); //THIS CODE TO GET CHALLE ID
- // bot.on("channel_post", async (ctx) => {
- //   console.log(ctx.chat.id);
- // });
- // bot.command("test", async (ctx) => {
- //   // await bot.api.sendMessage(CHANNEL_ID, "TEST123");
- //   await ctx.reply(` ${1.1} `, {
- //     parse_mode: "HTML",
- //   });
- // });
+});
+//THIS CODE TO GET CHALLE ID
+// bot.on("channel_post", async (ctx) => {
+//   console.log(ctx.chat.id);
+// });
+// bot.command("test", async (ctx) => {
+//   // await bot.api.sendMessage(CHANNEL_ID, "TEST123");
+//   await ctx.reply(` ${1.1} `, {
+//     parse_mode: "HTML",
+//   });
+// });
+_botConfig.default.catch((err)=>{
+    const ctx = err.ctx;
+    console.error(`Error while handling update ${ctx.update.update_id}:`);
+    const e = err.error;
+    if (e instanceof _grammy.GrammyError) {
+        console.error("Error in request:", e.description);
+    } else if (e instanceof _grammy.HttpError) {
+        console.error("Could not contact Telegram:", e);
+    } else {
+        console.error("Unknown error:", e);
+    }
+});

@@ -1,6 +1,4 @@
 import { createConversation } from "@grammyjs/conversations";
-import { NOT_REGISTERD } from "../config/constants";
-import router from "../config/router";
 import greetingConversation from "../conversations/greeting.conversation";
 import { Composer } from "grammy";
 import { MyContext } from "../types";

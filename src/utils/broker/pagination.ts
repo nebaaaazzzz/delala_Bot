@@ -69,7 +69,7 @@ const paginateHouse = async (ctx: MyContext) => {
           }
         );
       } else {
-        await ctx.reply("No Posted House to Display");
+        await ctx.reply(ctx.t("no-house-posted"));
       }
 
       //console.log(houses);

@@ -72,6 +72,9 @@ _export(exports, {
     MY_HOUSES: function() {
         return MY_HOUSES;
     },
+    HOUSES: function() {
+        return HOUSES;
+    },
     BROKERS: function() {
         return BROKERS;
     },
@@ -86,7 +89,7 @@ _export(exports, {
     }
 });
 const EN_LANGUAGE = "English";
-const AM_LANGUAGE = "Amharic";
+const AM_LANGUAGE = "አማርኛ";
 const BROKER = "Broker";
 const HOME_SEEKER = "Home Seeker";
 const LANGUAGES = [
@@ -106,8 +109,7 @@ const SUBCITIES = [
     "Bole",
     "Gulele",
     "Kirkos",
-    "Kolfe",
-    "Keranio",
+    "Kolfe Keranio",
     "Lideta",
     "Nifas Silk-Lafto",
     "Yeka",
@@ -131,6 +133,7 @@ const BUY_HOUSE = "Buy house";
 const ABOUT_US = "About Us";
 const TERMS_OF_USE = "Terms of Use";
 const MY_HOUSES = "My Houses";
+const HOUSES = "Houses";
 const BROKERS = "Brokers";
 const HOME_SEEKERS = "Home Seekers";
 const SUBMIT = "Submit";

@@ -1,36 +1,41 @@
 import { Status } from "@prisma/client";
-export function housePostBuilder({
-  subCity,
-  woredaOrSpecificPlace,
-  area,
-  numberOfBedrooms,
-  numberOfBathrooms,
-  priceOfTheHouse,
-  propertyType,
-  housePostType,
-}: {
-  subCity: string;
-  woredaOrSpecificPlace: string;
-  area: string;
-  numberOfBedrooms: number;
-  numberOfBathrooms: number;
-  priceOfTheHouse: number;
-  propertyType: string;
-  housePostType: string;
-}): string {
+import { MyContext } from "../types";
+export function housePostBuilder(
+  ctx: MyContext,
+  {
+    subCity,
+    woredaOrSpecificPlace,
+    area,
+    numberOfBedrooms,
+    numberOfBathrooms,
+    priceOfTheHouse,
+    propertyType,
+    housePostType,
+  }: {
+    subCity: string;
+    woredaOrSpecificPlace: string;
+    area: string;
+    numberOfBedrooms: number;
+    numberOfBathrooms: number;
+    priceOfTheHouse: number;
+    propertyType: string;
+    housePostType: string;
+  }
+): string {
   return `
- <b>Subcity : </b> ${subCity}
-<b>woreds : </b>  ${woredaOrSpecificPlace}
-<b>area : </b>     ${area}
-<b>Number of bedroom : </b> ${numberOfBedrooms}
-<b>Number of bathroom : </b> ${numberOfBathrooms}
-<b>Price : </b> ${priceOfTheHouse}
-<b>Property type</b> ${propertyType},
-<b>house post type</b> ${housePostType}
+ <b>${ctx.t("subcity")} : </b> ${subCity}
+<b>${ctx.t("wrda-spcic-loc")} : </b>  ${woredaOrSpecificPlace}
+<b>${ctx.t("area-z-house")} : </b>     ${area}
+<b>${ctx.t("nmbr-bedrooms")} : </b> ${numberOfBedrooms}
+<b>${ctx.t("nmbr-bathrooms")}: </b> ${numberOfBathrooms}
+<b>${ctx.t("price-z-house")} : </b> ${priceOfTheHouse}
+<b>${ctx.t("pprty-type")} :</b> ${propertyType},
+<b>${ctx.t("hw-pt-type")} : </b> ${housePostType}
 `;
 }
 
 export function housePostWithStatusBuilder(
+  ctx: MyContext,
   status: Status,
   {
     subCity,
@@ -54,7 +59,7 @@ export function housePostWithStatusBuilder(
 ): string {
   return `
         //////////////// ${status} /////////
-       ${housePostBuilder({
+       ${housePostBuilder(ctx, {
          subCity,
          woredaOrSpecificPlace,
          area,

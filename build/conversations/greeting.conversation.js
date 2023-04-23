@@ -19,22 +19,23 @@ function _interop_require_default(obj) {
     };
 }
 async function greetingConversation(conversation, ctx) {
-    await ctx.reply(`Welcome! ${ctx?.from?.first_name}`);
-    let message = await ctx.reply("Select language", {
+    await ctx.reply(`Welcome! /  እንኳን ደና መጡ  ${ctx?.from?.first_name}`);
+    await ctx.reply("Select language / ቋንቋ ይምረጡ ", {
         reply_markup: _keyboards.selectLanguageKeyboard
     });
     const language = await conversation.form.select([
         _constants.EN_LANGUAGE,
         _constants.AM_LANGUAGE
     ]); //TODO add regex to limit worde l
-    await ctx.reply("Select account type", {
-        reply_markup: _keyboards.selectUserTypeKeyboard
+    await ctx.i18n.setLocale(language == _constants.AM_LANGUAGE ? "am" : "en");
+    await ctx.reply(ctx.t("pick-acct-type"), {
+        reply_markup: (0, _keyboards.getSelectUserTypeKeyboard)(ctx)
     });
     const userType = await conversation.form.select([
-        _constants.BROKER,
-        _constants.HOME_SEEKER
+        ctx.t("BROKER"),
+        ctx.t("HOME_SEEKER")
     ]);
-    if (userType == _constants.BROKER) {
+    if (userType == ctx.t("BROKER")) {
         const { contact , fullName , subCity  } = await (0, _brokerregistrationconversation.default)(conversation, ctx);
         await _prisma.User.create({
             data: {
@@ -49,18 +50,14 @@ async function greetingConversation(conversation, ctx) {
                 userName: ctx.from?.username
             }
         });
-        await ctx.reply("successfuly registerd", {
-            reply_markup: _keyboards.brokerMainMenuKeyboard
+        await ctx.reply(ctx.t("success-registerd"), {
+            reply_markup: (0, _keyboards.getBrokerMainMenuKeyboard)(ctx)
         });
     } else {
-        await ctx.reply("please share your contact", {
-            reply_markup: _keyboards.sharePhoneKeyboard
+        await ctx.reply(ctx.t("pls-share-yr-ctact"), {
+            reply_markup: (0, _keyboards.getSharePhoneKeyboard)(ctx)
         });
-        const contact = await conversation.waitFor(":contact", {
-            otherwise: ()=>{
-                ctx.reply("please share your contact");
-            }
-        });
+        const contact = await conversation.waitFor(":contact");
         await _prisma.User.create({
             data: {
                 telegramId: String(ctx.from?.id),
@@ -72,8 +69,8 @@ async function greetingConversation(conversation, ctx) {
                 userName: ctx.from?.username
             }
         });
-        await ctx.reply("successfuly registerd", {
-            reply_markup: _keyboards.homeSeekerMainMenuKeyboard
+        await ctx.reply(ctx.t("success-registerd"), {
+            reply_markup: (0, _keyboards.getHomeSeekerMainMenuKeyboard)(ctx)
         });
     }
 }

@@ -16,22 +16,22 @@ _export(exports, {
         return housePostWithStatusBuilder;
     }
 });
-function housePostBuilder({ subCity , woredaOrSpecificPlace , area , numberOfBedrooms , numberOfBathrooms , priceOfTheHouse , propertyType , housePostType  }) {
+function housePostBuilder(ctx, { subCity , woredaOrSpecificPlace , area , numberOfBedrooms , numberOfBathrooms , priceOfTheHouse , propertyType , housePostType  }) {
     return `
- <b>Subcity : </b> ${subCity}
-<b>woreds : </b>  ${woredaOrSpecificPlace}
-<b>area : </b>     ${area}
-<b>Number of bedroom : </b> ${numberOfBedrooms}
-<b>Number of bathroom : </b> ${numberOfBathrooms}
-<b>Price : </b> ${priceOfTheHouse}
-<b>Property type</b> ${propertyType},
-<b>house post type</b> ${housePostType}
+ <b>${ctx.t("subcity")} : </b> ${subCity}
+<b>${ctx.t("wrda-spcic-loc")} : </b>  ${woredaOrSpecificPlace}
+<b>${ctx.t("area-z-house")} : </b>     ${area}
+<b>${ctx.t("nmbr-bedrooms")} : </b> ${numberOfBedrooms}
+<b>${ctx.t("nmbr-bathrooms")}: </b> ${numberOfBathrooms}
+<b>${ctx.t("price-z-house")} : </b> ${priceOfTheHouse}
+<b>${ctx.t("pprty-type")} :</b> ${propertyType},
+<b>${ctx.t("hw-pt-type")} : </b> ${housePostType}
 `;
 }
-function housePostWithStatusBuilder(status, { subCity , woredaOrSpecificPlace , area , numberOfBedrooms , numberOfBathrooms , priceOfTheHouse , propertyType , housePostType  }) {
+function housePostWithStatusBuilder(ctx, status, { subCity , woredaOrSpecificPlace , area , numberOfBedrooms , numberOfBathrooms , priceOfTheHouse , propertyType , housePostType  }) {
     return `
         //////////////// ${status} /////////
-       ${housePostBuilder({
+       ${housePostBuilder(ctx, {
         subCity,
         woredaOrSpecificPlace,
         area,

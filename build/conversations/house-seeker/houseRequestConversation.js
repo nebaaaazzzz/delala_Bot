@@ -22,96 +22,99 @@ function _interop_require_default(obj) {
     };
 }
 async function handleCancelFromCtx(ctx) {
-    if (ctx.message?.text == _constants.CANCEL) {
-        await ctx.reply("Main menu", {
-            reply_markup: _keyboards.homeSeekerMainMenuKeyboard
+    if (ctx.message?.text == ctx.t("CANCEL")) {
+        await ctx.reply(ctx.t("mm"), {
+            reply_markup: (0, _keyboards.getHomeSeekerMainMenuKeyboard)(ctx)
         });
         return await ctx.conversation.exit();
     }
 }
 async function houseRequestConversation(conversation, ctx) {
     // **** choose rent or buy
-    await ctx.reply("rent or buy", {
-        reply_markup: _keyboards.selectRequestTypeKeyboardWithCancel
+    await ctx.reply(ctx.t("rent-buy"), {
+        reply_markup: (0, _keyboards.getSelectRequestTypeKeyboardWithCancel)(ctx)
     });
     const houseRequestType = await conversation.form.select([
-        _constants.BUY_HOUSE,
-        _constants.RENT_HOUSE
+        ctx.t("BUY_HOUSE"),
+        ctx.t("RENT_HOUSE")
     ], async (ctx)=>{
         await handleCancelFromCtx(ctx);
     });
     //**** end choose rent or buy
     // **** choose subcity
-    await ctx.reply("Select subcity of the house", {
-        reply_markup: _keyboards.selectSubCityKeyboardWithCancle
+    await ctx.reply(ctx.t("Slct-sub-city-zhouse"), {
+        reply_markup: (0, _keyboards.getSelectSubCityKeyboardWithCancel)(ctx)
     });
-    const subCity = await conversation.form.select(_constants.SUBCITIES, async (ctx)=>{
+    const subCity = await conversation.form.select(JSON.parse(ctx.t("SUBCITIES")), async (ctx)=>{
         await handleCancelFromCtx(ctx);
     });
     // **** end choose subcity
     //****enter woreda/specific
-    await ctx.reply("woreda / specific", {
-        reply_markup: _keyboards.cancelKeyboard
+    await ctx.reply(ctx.t("wrda-spcic-loc"), {
+        reply_markup: (0, _keyboards.getCancelKeyboard)(ctx)
     });
     const woredaOrSpecificPlace = await conversation.form.text();
-    if (woredaOrSpecificPlace === _constants.CANCEL) {
-        await ctx.reply("Main menu", {
-            reply_markup: _keyboards.homeSeekerMainMenuKeyboard
+    if (woredaOrSpecificPlace === ctx.t("CANCEL")) {
+        await ctx.reply(ctx.t("mm"), {
+            reply_markup: (0, _keyboards.getHomeSeekerMainMenuKeyboard)(ctx)
         });
         return;
     }
     //****end enter woreda/specific
     //*** property type
-    await ctx.reply("property type", {
-        reply_markup: _keyboards.selectPropertyKeyboardWithCancle
+    await ctx.reply(ctx.t("pprty-type"), {
+        reply_markup: (0, _keyboards.getSelectPropertyTypeKeyboardWithCancel)(ctx)
     });
-    const propertyType = await conversation.form.select(_constants.PROPERTY_TYPES, async (ctx)=>await handleCancelFromCtx(ctx));
+    const propertyType = await conversation.form.select(JSON.parse(ctx.t("PROPERTY_TYPES")), async (ctx)=>await handleCancelFromCtx(ctx));
     //*** end property type
-    await ctx.reply("Area ", {
+    await ctx.reply(ctx.t("area-z-house"), {
         reply_markup: {
             remove_keyboard: true
         }
     });
-    const area = await conversation.form.text(async (ctx)=>{
-        await handleCancelFromCtx(ctx);
-        await ctx.reply("Please enter area ", {
-            reply_markup: {
-                remove_keyboard: true
-            }
+    const area = await conversation.form.text();
+    if (area === ctx.t("CANCEL")) {
+        await ctx.reply(ctx.t("mm"), {
+            reply_markup: (0, _keyboards.getHomeSeekerMainMenuKeyboard)(ctx)
         });
-    });
-    await ctx.reply("Number of bedrooms in number", {
-        reply_markup: _keyboards.cancelKeyboard
+        return;
+    }
+    await ctx.reply(ctx.t("nmbr-bedrooms"), {
+        reply_markup: (0, _keyboards.getCancelKeyboard)(ctx)
     });
     const numberOfBedrooms = await conversation.form.number(async (ctx)=>{
         await handleCancelFromCtx(ctx);
     });
-    await ctx.reply("number of bathrooms in number", {
-        reply_markup: _keyboards.cancelKeyboard
+    await ctx.reply(ctx.t("nmbr-bathrooms"), {
+        reply_markup: (0, _keyboards.getCancelKeyboard)(ctx)
     });
     const numberOfBathrooms = await conversation.form.number(async (ctx)=>{
         await handleCancelFromCtx(ctx);
     });
-    await ctx.reply("price of the house", {
-        reply_markup: _keyboards.cancelKeyboard
+    await ctx.reply(ctx.t("price-z-house"), {
+        reply_markup: (0, _keyboards.getCancelKeyboard)(ctx)
     });
     const priceOfTheHouse = await conversation.form.number(async (ctx)=>{
         await handleCancelFromCtx(ctx);
     });
-    await ctx.reply((0, _housepost.housePostBuilder)({
+    await ctx.reply((0, _housepost.housePostBuilder)(ctx, {
         area,
         numberOfBathrooms,
         numberOfBedrooms,
         priceOfTheHouse,
         subCity,
-        woredaOrSpecificPlace
+        woredaOrSpecificPlace,
+        housePostType: houseRequestType,
+        propertyType
     }), {
         parse_mode: "HTML",
-        reply_markup: _inlinekeyboard.confirmHousePostInlineKeyboard
+        reply_markup: {
+            inline_keyboard: (0, _inlinekeyboard.getConfirmHousePostInlineKeyboard)(ctx)
+        }
     });
     const cbData = await conversation.waitFor("callback_query:data");
     if (cbData.callbackQuery.data == _constants.SUBMIT) {
-        const house = await _prisma.HouseRequest.create({
+        await _prisma.HouseRequest.create({
             data: {
                 numberOfBathrooms,
                 numberOfBedrooms,
@@ -121,7 +124,7 @@ async function houseRequestConversation(conversation, ctx) {
                 area,
                 propertyType,
                 price: priceOfTheHouse,
-                houseRequestType: houseRequestType == "Buy house" ? _client.HouseRequestType.BUY : _client.HouseRequestType.RENT
+                houseRequestType: houseRequestType == ctx.t("BUY_HOUSE") ? _client.HouseRequestType.BUY : _client.HouseRequestType.RENT
             }
         });
         const user = await _prisma.User.findUnique({
@@ -129,8 +132,8 @@ async function houseRequestConversation(conversation, ctx) {
                 telegramId: String(ctx.from?.id)
             }
         });
-        await ctx.reply("Successfully submitted we will contact you with you requirement", {
-            reply_markup: _keyboards.homeSeekerMainMenuKeyboard
+        await ctx.reply(ctx.t("success-submit-request"), {
+            reply_markup: (0, _keyboards.getHomeSeekerMainMenuKeyboard)(ctx)
         });
         await _botConfig.default.api.sendMessage(_constants.ADMIN_TELEGRAM_ID, (0, _houseRequest.houseRequestBuilder)({
             area,
@@ -146,8 +149,8 @@ async function houseRequestConversation(conversation, ctx) {
         });
         return;
     } else if (cbData.callbackQuery.data == _constants.CANCEL) {
-        await ctx.reply("Submission cancled", {
-            reply_markup: _keyboards.homeSeekerMainMenuKeyboard
+        await ctx.reply(ctx.t("submission-cancle"), {
+            reply_markup: (0, _keyboards.getHomeSeekerMainMenuKeyboard)(ctx)
         });
     }
 }

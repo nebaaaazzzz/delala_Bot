@@ -1,15 +1,18 @@
 import { InlineKeyboard } from "grammy";
-import { AM_LANGUAGE, CANCEL, EN_LANGUAGE, SUBMIT } from "../config/constants";
+import { CANCEL, SUBMIT } from "../config/constants";
+import { MyContext } from "../types";
 
-export const confirmHousePostInlineKeyboard = new InlineKeyboard([
-  [
-    {
-      text: "Cancel",
-      callback_data: CANCEL,
-    },
-    {
-      text: "Submit",
-      callback_data: SUBMIT,
-    },
-  ],
-]).inline_keyboard;
+export function getConfirmHousePostInlineKeyboard(ctx: MyContext) {
+  return new InlineKeyboard([
+    [
+      {
+        text: ctx.t("CANCEL"),
+        callback_data: CANCEL,
+      },
+      {
+        text: ctx.t("SUBMIT"),
+        callback_data: SUBMIT,
+      },
+    ],
+  ]).inline_keyboard;
+}

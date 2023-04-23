@@ -1,118 +1,123 @@
 import { Keyboard } from "grammy";
 import {
-  ABOUT_US,
   AM_LANGUAGE,
-  BROKER,
   BROKERS,
-  BUY_HOUSE,
-  CANCEL,
   EN_LANGUAGE,
-  HOME_SEEKER,
   HOME_SEEKERS,
   HOUSES,
-  MY_HOUSES,
-  PROPERTY_TYPES,
-  RENT_HOUSE,
-  REQUEST_HOUSE,
-  SELL_HOUSE,
-  SETTING,
-  SUBCITIES,
-  TERMS_OF_USE,
 } from "../config/constants";
+import { MyContext } from "../types";
 
-export const selectUserTypeKeyboard = new Keyboard([
-  [
-    {
-      text: BROKER,
-    },
-  ],
-  [
-    {
-      text: HOME_SEEKER,
-    },
-  ],
-])
-  .oneTime(true)
-  .resized(true);
+export function getSelectUserTypeKeyboard(ctx: MyContext) {
+  return new Keyboard([
+    [
+      {
+        text: ctx.t("BROKER"),
+      },
+    ],
+    [
+      {
+        text: ctx.t("HOME_SEEKER,"),
+      },
+    ],
+  ])
+    .oneTime(true)
+    .resized(true);
+}
+export function getSharePhoneKeyboard(ctx: MyContext) {
+  return new Keyboard([
+    [
+      {
+        text: ctx.t("pls-share-yr-ctact"),
+        request_contact: true,
+      },
+    ],
+  ])
+    .oneTime(true)
+    .resized(true);
+}
 
-export const sharePhoneKeyboard = new Keyboard([
-  [
-    {
-      text: "Share Contact",
-      request_contact: true,
-    },
-  ],
-])
-  .oneTime(true)
-  .resized(true);
+export function getBrokerMainMenuKeyboard(ctx: MyContext) {
+  return new Keyboard([
+    [
+      {
+        text: ctx.t("SELL_HOUSE"),
+      },
 
-export const brokerMainMenuKeyboard = new Keyboard([
-  [
-    {
-      text: SELL_HOUSE,
-    },
+      {
+        text: ctx.t("RENT_HOUSE"),
+      },
+    ],
+    [
+      {
+        text: ctx.t("SETTING"),
+      },
+      {
+        text: ctx.t("MY_HOUSES"),
+      },
+    ],
+    [
+      {
+        text: ctx.t("ABOUT_US"),
+      },
+      {
+        text: ctx.t("TERMS_OF_USE"),
+      },
+    ],
+  ]).resized(true);
+}
+export function getHomeSeekerMainMenuKeyboard(ctx: MyContext) {
+  return new Keyboard([
+    [
+      {
+        text: ctx.t("REQUEST_HOUSE"),
+      },
+    ],
+    [
+      {
+        text: ctx.t("SETTING"),
+      },
+      {
+        text: ctx.t("ABOUT_US"),
+      },
+    ],
+    [
+      {
+        text: ctx.t("TERMS_OF_USE"),
+      },
+    ],
+  ]).resized(true);
+}
 
-    {
-      text: RENT_HOUSE,
-    },
-  ],
-  [
-    {
-      text: SETTING,
-    },
-    {
-      text: MY_HOUSES,
-    },
-  ],
-  [
-    {
-      text: ABOUT_US,
-    },
-    {
-      text: TERMS_OF_USE,
-    },
-  ],
-]).resized(true);
-export const homeSeekerMainMenuKeyboard = new Keyboard([
-  [
-    {
-      text: REQUEST_HOUSE,
-    },
-  ],
-  [
-    {
-      text: SETTING,
-    },
-    {
-      text: ABOUT_US,
-    },
-  ],
-  [
-    {
-      text: TERMS_OF_USE,
-    },
-  ],
-]).resized(true);
-export const selectSubCityKeyboard = new Keyboard(
-  SUBCITIES.map((subCity) => [{ text: subCity }])
-).resized(true);
-export const selectSubCityKeyboardWithCancle = new Keyboard(
-  [...SUBCITIES, CANCEL].map((subCity) => [{ text: subCity }])
-).resized(true);
-export const selectPropertyKeyboardWithCancle = new Keyboard(
-  [...PROPERTY_TYPES, CANCEL].map((subCity) => [{ text: subCity }])
-).resized(true);
-export const selectRequestTypeKeyboardWithCancel = new Keyboard(
-  [RENT_HOUSE, BUY_HOUSE, CANCEL].map((type) => [{ text: type }])
-).resized(true);
-export const cancelKeyboard = new Keyboard([
-  [
-    {
-      text: CANCEL,
-    },
-  ],
-]).resized(true);
-
+export function getSelectSubCityKeyboard(ctx: MyContext) {
+  return new Keyboard(
+    [...JSON.parse(ctx.t("SUBCITIES"))].map((subCity) => [{ text: subCity }])
+  ).resized(true);
+}
+export function getSelectSubCityKeyboardWithCancel(ctx: MyContext) {
+  return new Keyboard(
+    [...JSON.parse(ctx.t("SUBCITIES")), ctx.t("CANCEL")].map((subCity) => [
+      { text: subCity },
+    ])
+  ).resized(true);
+}
+export function getSelectPropertyTypeKeyboardWithCancel(ctx: MyContext) {
+  return new Keyboard(
+    [...JSON.parse(ctx.t("PROPERTY_TYPES")), ctx.t("CANCEL")].map(
+      (property) => [{ text: property }]
+    )
+  ).resized(true);
+}
+export function getSelectRequestTypeKeyboardWithCancel(ctx: MyContext) {
+  return new Keyboard(
+    [ctx.t("RENT_HOUSE"), ctx.t("BUY_HOUSE"), ctx.t("CANCEL")].map((type) => [
+      { text: type },
+    ])
+  ).resized(true);
+}
+export function getCancelKeyboard(ctx: MyContext) {
+  return new Keyboard([[{ text: ctx.t("CANCEL") }]]).resized(true);
+}
 export const selectLanguageKeyboard = new Keyboard([
   [
     {

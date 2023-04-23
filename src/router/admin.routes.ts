@@ -23,6 +23,7 @@ export default function (adminRouter: Composer<MyContext>) {
       reply_markup: adminKeyboard,
     });
   });
+
   adminRouter.hears(BROKERS, getBrokers);
   adminRouter.callbackQuery(/^(\/broker\/page\/.+)/gi, paginateBroker);
 
