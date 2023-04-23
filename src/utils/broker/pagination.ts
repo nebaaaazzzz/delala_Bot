@@ -53,7 +53,7 @@ const paginateHouse = async (ctx: MyContext) => {
         }
 
         await ctx.reply(
-          housePostWithStatusBuilder(house.status, {
+          housePostWithStatusBuilder(ctx, house.status, {
             area: house.area,
             housePostType: house.housePostType,
             numberOfBathrooms: house.numberOfBathrooms,
@@ -106,7 +106,7 @@ const getMyHouses = async (ctx: MyContext) => {
         inlineKeyboard.text(` ${i}`, `/house/page/${i}`);
       }
       await ctx.reply(
-        housePostWithStatusBuilder(house.status, {
+        housePostWithStatusBuilder(ctx, house.status, {
           area: house.area,
           housePostType: house.housePostType,
           numberOfBathrooms: house.numberOfBathrooms,

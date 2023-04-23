@@ -19,10 +19,11 @@ export async function settingConversation(
   conversation: MyConversation,
   ctx: MyContext
 ) {
-  await ctx.reply("setting", {
+  await ctx.reply(ctx.t("SETTING"), {
     reply_markup: selectLanguageKeyboard,
   });
   const lang = await conversation.form.select([EN_LANGUAGE, AM_LANGUAGE]);
+  await ctx.i18n.setLocale(lang == EN_LANGUAGE ? "en" : "am");
   await User.update({
     data: {
       language: AM_LANGUAGE == lang ? Language.AM : Language.EN,
@@ -31,7 +32,7 @@ export async function settingConversation(
       telegramId: String(ctx.from?.id),
     },
   });
-  await ctx.reply("successfuly language set", {
+  await ctx.reply(ctx.t("success-lang-chng"), {
     reply_markup: getHomeSeekerMainMenuKeyboard(ctx),
   });
   return;

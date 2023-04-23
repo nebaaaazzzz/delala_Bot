@@ -8,6 +8,7 @@ import { getMyHouses, paginateHouse } from "../utils/broker/pagination";
 import { hears } from "@grammyjs/i18n";
 
 export default function (brokerRouter: Composer<MyContext>) {
+  //TODO : fix conversation might stuck in error
   brokerRouter.errorBoundary((err) => {
     console.log("broker sell house error : ", err.message);
   }, createConversation(houseRentPostConversation));

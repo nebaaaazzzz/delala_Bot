@@ -89,6 +89,12 @@ export async function housePostConversation(
     },
   });
   const area = await conversation.form.text();
+  if (area === ctx.t("CANCEL")) {
+    await ctx.reply(ctx.t("mm"), {
+      reply_markup: getBrokerMainMenuKeyboard(ctx),
+    });
+    return;
+  }
   //**end area  */
 
   //**start num of bedroom  */
@@ -122,7 +128,7 @@ export async function housePostConversation(
       type: "photo",
       media: imgArray[0] as string,
       parse_mode: "HTML",
-      caption: housePostBuilder({
+      caption: housePostBuilder(ctx, {
         area,
         numberOfBathrooms,
         numberOfBedrooms,
@@ -183,7 +189,7 @@ export async function housePostConversation(
         type: "photo",
         media: imgArray[0] as string,
         parse_mode: "HTML",
-        caption: housePostWithStatusBuilder(house.status, {
+        caption: housePostWithStatusBuilder(ctx, house.status, {
           area,
           numberOfBathrooms,
           numberOfBedrooms,

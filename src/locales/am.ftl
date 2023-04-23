@@ -43,3 +43,4 @@ success-submit-request = በተሳካ ሁኔታ ገብተናል ከእርስዎ 
 REQUEST_HOUSE = የቤት ጥያቄ 
 RENT_HOUSE = የቤት ኪራይ
 BUY_HOUSE = ቤት ይግዙ
+success-lang-chng=ስኬታማ ቋንቋ ተለውጧል

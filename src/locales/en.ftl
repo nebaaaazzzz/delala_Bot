@@ -43,4 +43,5 @@ success-submit-request = Successfully submitted we will contact you with you req
 REQUEST_HOUSE = Request House
 RENT_HOUSE = Rent House
 BUY_HOUSE = Buy House
+success-lang-chng=successfuly language changed
 
