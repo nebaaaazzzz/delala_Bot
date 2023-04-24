@@ -84,9 +84,7 @@ export async function housePostConversation(
 
   //**start area  */
   await ctx.reply(ctx.t("area-z-house"), {
-    reply_markup: {
-      remove_keyboard: true,
-    },
+    reply_markup: getCancelKeyboard(ctx),
   });
   const area = await conversation.form.text();
   if (area === ctx.t("CANCEL")) {
