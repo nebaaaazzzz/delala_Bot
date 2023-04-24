@@ -51,7 +51,7 @@ async function handleApproval(ctx: MyContext, status: "APPROVED" | "REJECTED") {
     //update the message to show new status for the admin
     try {
       await bot.api.editMessageCaption(ADMIN_TELEGRAM_ID, captionId, {
-        caption: housePostWithStatusBuilder(house.status, {
+        caption: housePostWithStatusBuilder(ctx, house.status, {
           area: house.area,
           numberOfBathrooms: house.numberOfBathrooms,
           numberOfBedrooms: house.numberOfBedrooms,
@@ -73,7 +73,7 @@ async function handleApproval(ctx: MyContext, status: "APPROVED" | "REJECTED") {
           media: houseImages[0].image as string,
           parse_mode: "HTML",
           caption:
-            housePostBuilder({
+            housePostBuilder(ctx, {
               area: house.area,
               numberOfBathrooms: house.numberOfBathrooms,
               numberOfBedrooms: house.numberOfBedrooms,
@@ -104,7 +104,7 @@ async function handleApproval(ctx: MyContext, status: "APPROVED" | "REJECTED") {
         type: "photo",
         media: houseImages[0].image as string,
         parse_mode: "HTML",
-        caption: housePostWithStatusBuilder(house.status, {
+        caption: housePostWithStatusBuilder(ctx, house.status, {
           area: house.area,
           numberOfBathrooms: house.numberOfBathrooms,
           numberOfBedrooms: house.numberOfBedrooms,
