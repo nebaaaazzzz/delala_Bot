@@ -14,7 +14,7 @@ async function handleCancelFromCtx(ctx: MyContext) {
     return await ctx.conversation.exit();
   }
 }
-
+//TODO remove this fucntion
 export async function settingConversation(
   conversation: MyConversation,
   ctx: MyContext

@@ -17,7 +17,7 @@ export function getSelectUserTypeKeyboard(ctx: MyContext) {
     ],
     [
       {
-        text: ctx.t("HOME_SEEKER,"),
+        text: ctx.t("HOME_SEEKER"),
       },
     ],
   ])

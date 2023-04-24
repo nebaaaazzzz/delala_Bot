@@ -4,22 +4,16 @@ import {
   getHomeSeekerMainMenuKeyboard,
   getSelectUserTypeKeyboard,
   getSharePhoneKeyboard,
-  selectLanguageKeyboard,
 } from "../components/keyboards";
-import { AM_LANGUAGE, EN_LANGUAGE } from "../config/constants";
 import { User } from "../config/prisma";
 import { MyContext, MyConversation } from "../types";
 import brokerRegistration from "./broker/broker-registration.conversation";
+import { i18n } from "../config/botConfig";
 export default async function greetingConversation(
   conversation: MyConversation,
   ctx: MyContext
 ) {
-  await ctx.reply(`Welcome! /  እንኳን ደና መጡ  ${ctx?.from?.first_name}`);
-  await ctx.reply("Select language / ቋንቋ ይምረጡ ", {
-    reply_markup: selectLanguageKeyboard,
-  });
-  const language = await conversation.form.select([EN_LANGUAGE, AM_LANGUAGE]); //TODO add regex to limit worde l
-  await ctx.i18n.setLocale(language == AM_LANGUAGE ? "am" : "en");
+  await conversation.run(i18n);
   await ctx.reply(ctx.t("pick-acct-type"), {
     reply_markup: getSelectUserTypeKeyboard(ctx),
   });
@@ -42,7 +36,8 @@ export default async function greetingConversation(
         fullName,
         subCity,
         phoneNumber: contact.message?.contact?.phone_number,
-        language: language == AM_LANGUAGE ? Language.AM : Language.EN,
+        language:
+          (await ctx.i18n.getLocale()) == "am" ? Language.AM : Language.EN,
         userName: ctx.from?.username,
       },
     });
@@ -60,7 +55,8 @@ export default async function greetingConversation(
         telegramFirstName: ctx.from?.first_name,
         telegramLastName: ctx.from?.last_name,
         phoneNumber: contact.message?.contact?.phone_number,
-        language: language as Language,
+        language:
+          (await ctx.i18n.getLocale()) == "am" ? Language.AM : Language.EN,
         userType: UserType.HOME_SEEKER,
         userName: ctx.from?.username,
       },

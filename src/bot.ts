@@ -1,9 +1,7 @@
-dotenv.config();
-import { GrammyError, HttpError, lazySession, session } from "grammy";
-import { conversations } from "@grammyjs/conversations";
 import dotenv from "dotenv";
-import { PrismaAdapter } from "@grammyjs/storage-prisma";
-import { Session } from "./config/prisma";
+dotenv.config();
+import { GrammyError, HttpError, lazySession } from "grammy";
+import { conversations, createConversation } from "@grammyjs/conversations";
 import bot from "./config/botConfig";
 import router from "./config/router";
 import { UserType } from "@prisma/client";
@@ -12,32 +10,22 @@ import brokerRoutes from "./router/broker.routes";
 import home_seekerRoutes from "./router/home_seeker.routes";
 import loginRoutes from "./router/login.routes";
 import { NOT_REGISTERD } from "./config/constants";
-import { I18n } from "@grammyjs/i18n";
-import { MyContext } from "./types";
-const i18n = new I18n<MyContext>({
-  defaultLocale: "en",
-  useSession: true, // whether to store user language in session
-  directory: "./src/locales", // Load all translation files from locales/.
-});
-bot.use(
-  lazySession({
-    initial: () => ({
-      pageNumber: 1,
-      adminUserPageNumber: 1,
-      adminBrokerPageNumber: 1,
-      __language_code: "en",
-    }),
-    getSessionKey: (ctx) => String(ctx.from?.id),
-    storage: new PrismaAdapter(Session),
-  })
-);
-bot.use(i18n);
+import { MyContext, MyConversation } from "./types";
+
 bot.use(conversations());
 bot.use(router);
 adminRoutes(router.route(UserType.ADMIN));
 loginRoutes(router.route(NOT_REGISTERD));
 brokerRoutes(router.route(UserType.BROKER));
 home_seekerRoutes(router.route(UserType.HOME_SEEKER));
+// async function testConversation(conversation: MyConversation, ctx: MyContext) {
+//   console.log("lang : ", await ctx.i18n.getLocale());
+// }
+// bot.use(createConversation(testConversation));
+// bot.command("language", async (ctx) => {
+//   await ctx.conversation.enter("testConversation");
+// });
+
 bot.start({
   onStart(botInfo) {
     console.log("Started on :", botInfo.username);
@@ -64,4 +52,10 @@ bot.catch((err) => {
   } else {
     console.error("Unknown error:", e);
   }
+});
+// });
+bot.start({
+  onStart: (botInfo) => {
+    console.log("Started on :", botInfo.username);
+  },
 });

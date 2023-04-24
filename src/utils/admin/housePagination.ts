@@ -51,7 +51,7 @@ export const paginateHouses = async (ctx: MyContext) => {
       }
 
       await ctx.reply(
-        housePostWithStatusBuilder(house.status, {
+        housePostWithStatusBuilder(ctx, house.status, {
           area: house.area,
           housePostType: house.housePostType,
           numberOfBathrooms: house.numberOfBathrooms,
@@ -67,7 +67,7 @@ export const paginateHouses = async (ctx: MyContext) => {
         }
       );
     } else {
-      await ctx.reply("No Home Seeer to Display");
+      await ctx.reply("No House to Display");
     }
 
     //console.log(houses);
@@ -98,7 +98,7 @@ export const getHouses = async (ctx: MyContext) => {
       inlineKeyboard.text(` ${i}`, `/houses/page/${i}`);
     }
     await ctx.reply(
-      housePostWithStatusBuilder(house.status, {
+      housePostWithStatusBuilder(ctx, house.status, {
         area: house.area,
         housePostType: house.housePostType,
         numberOfBathrooms: house.numberOfBathrooms,
@@ -114,6 +114,6 @@ export const getHouses = async (ctx: MyContext) => {
       }
     );
   } else {
-    await ctx.reply("No Home Seeer to Display");
+    await ctx.reply("No House to Display");
   }
 };

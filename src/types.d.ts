@@ -1,4 +1,4 @@
-import { type Context, type LazySessionFlavor } from "grammy";
+import { LazySessionFlavor, type Context, type SessionFlavor } from "grammy";
 import {
   type ConversationFlavor,
   type Conversation,
@@ -9,11 +9,11 @@ export interface SessionData {
   pageNumber: number;
   adminUserPageNumber: number;
   adminBrokerPageNumber: number;
-  __language_code: string;
+  __language_code?: string;
 }
 
-type MyContext = Context &
-  ConversationFlavor &
-  LazySessionFlavor<SessionData> &
-  I18nFlavor;
-type MyConversation = Conversation<MyContext>;
+export type MyContext = Context &
+  SessionFlavor<SessionData> &
+  I18nFlavor &
+  ConversationFlavor;
+export type MyConversation = Conversation<MyContext>;
