@@ -30,62 +30,98 @@ async function handleApproval(ctx: MyContext, status: "APPROVED" | "REJECTED") {
     const splittedPath = ctx.callbackQuery?.data.split("/");
     const houseId = Number(splittedPath[3]);
     const captionId = Number(splittedPath[4]);
-
-    // approve the house
-    const house = await House.update({
+    let house = await House.findUnique({
       where: {
         id: houseId,
       },
-      include: {
-        user: true,
-      },
-      data: {
-        status: status,
-      },
     });
-    const houseImages = await HouseImage.findMany({
-      where: {
-        houseId: house.id,
-      },
-    });
-    //update the message to show new status for the admin
-    try {
-      await bot.api.editMessageCaption(ADMIN_TELEGRAM_ID, captionId, {
-        caption: housePostWithStatusBuilder(ctx, house.status, {
-          area: house.area,
-          numberOfBathrooms: house.numberOfBathrooms,
-          numberOfBedrooms: house.numberOfBedrooms,
-          priceOfTheHouse: house.price,
-          subCity: house.subCity,
-          woredaOrSpecificPlace: house.woredaOrSpecificPlace,
-          housePostType: house.housePostType,
-          propertyType: house.propertyType,
-        }),
+    if (house?.status == status) {
+      return await ctx.reply("House Already " + status);
+    } else {
+      let house = await House.update({
+        where: {
+          id: houseId,
+        },
+        include: {
+          user: true,
+        },
+        data: {
+          status: status,
+        },
       });
-    } catch (e: any) {
-      console.log(e.message);
-    }
-    //post to the channel approved house
-    if (status === "APPROVED") {
-      await bot.api.sendMediaGroup(CHANNEL_ID, [
+      const houseImages = await HouseImage.findMany({
+        where: {
+          houseId: house.id,
+        },
+      });
+      //update the message to show new status for the admin
+      try {
+        await bot.api.editMessageCaption(ADMIN_TELEGRAM_ID, captionId, {
+          parse_mode: "HTML",
+          caption: housePostWithStatusBuilder(ctx, house.status, {
+            area: house.area,
+            numberOfBathrooms: house.numberOfBathrooms,
+            numberOfBedrooms: house.numberOfBedrooms,
+            priceOfTheHouse: house.price,
+            subCity: house.subCity,
+            woredaOrSpecificPlace: house.woredaOrSpecificPlace,
+            housePostType: house.housePostType,
+            propertyType: house.propertyType,
+          }),
+        });
+      } catch (e: any) {
+        console.log(e.message);
+      }
+      //post to the channel approved house
+      if (status === "APPROVED") {
+        await bot.api.sendMediaGroup(CHANNEL_ID, [
+          {
+            type: "photo",
+            media: houseImages[0].image as string,
+            parse_mode: "HTML",
+            caption:
+              housePostBuilder(ctx, {
+                area: house.area,
+                numberOfBathrooms: house.numberOfBathrooms,
+                numberOfBedrooms: house.numberOfBedrooms,
+                priceOfTheHouse: house.price,
+                subCity: house.subCity,
+                woredaOrSpecificPlace: house.woredaOrSpecificPlace,
+                housePostType: house.housePostType,
+                propertyType: house.propertyType,
+              }) +
+              `
+              <b>Contact </b>: ${ADMIN_PHONE_NUMBER}
+            `,
+          },
+          {
+            type: "photo",
+            media: houseImages[0].image as string,
+          },
+          {
+            type: "photo",
+            media: houseImages[0].image as string,
+          },
+        ]);
+      }
+
+      await ctx.i18n.useLocale(house.user.language);
+      //send to the user the house is posted
+      await bot.api.sendMediaGroup(house.user.telegramId, [
         {
           type: "photo",
           media: houseImages[0].image as string,
           parse_mode: "HTML",
-          caption:
-            housePostBuilder(ctx, {
-              area: house.area,
-              numberOfBathrooms: house.numberOfBathrooms,
-              numberOfBedrooms: house.numberOfBedrooms,
-              priceOfTheHouse: house.price,
-              subCity: house.subCity,
-              woredaOrSpecificPlace: house.woredaOrSpecificPlace,
-              housePostType: house.housePostType,
-              propertyType: house.propertyType,
-            }) +
-            `
-            <b>Contact </b>: ${ADMIN_PHONE_NUMBER}
-          `,
+          caption: housePostWithStatusBuilder(ctx, house.status, {
+            area: house.area,
+            numberOfBathrooms: house.numberOfBathrooms,
+            numberOfBedrooms: house.numberOfBedrooms,
+            priceOfTheHouse: house.price,
+            subCity: house.subCity,
+            woredaOrSpecificPlace: house.woredaOrSpecificPlace,
+            housePostType: house.housePostType,
+            propertyType: house.propertyType,
+          }),
         },
         {
           type: "photo",
@@ -97,32 +133,6 @@ async function handleApproval(ctx: MyContext, status: "APPROVED" | "REJECTED") {
         },
       ]);
     }
-
-    //send to the user the house is posted
-    await bot.api.sendMediaGroup(house.user.telegramId, [
-      {
-        type: "photo",
-        media: houseImages[0].image as string,
-        parse_mode: "HTML",
-        caption: housePostWithStatusBuilder(ctx, house.status, {
-          area: house.area,
-          numberOfBathrooms: house.numberOfBathrooms,
-          numberOfBedrooms: house.numberOfBedrooms,
-          priceOfTheHouse: house.price,
-          subCity: house.subCity,
-          woredaOrSpecificPlace: house.woredaOrSpecificPlace,
-          housePostType: house.housePostType,
-          propertyType: house.propertyType,
-        }),
-      },
-      {
-        type: "photo",
-        media: houseImages[0].image as string,
-      },
-      {
-        type: "photo",
-        media: houseImages[0].image as string,
-      },
-    ]);
+    // approve the house
   }
 }

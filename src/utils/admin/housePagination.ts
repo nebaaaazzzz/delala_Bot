@@ -1,8 +1,6 @@
 import { InlineKeyboard } from "grammy";
 import { MyContext, SessionData } from "../../types";
 import { House, User } from "../../config/prisma";
-import { UserType } from "@prisma/client";
-import { userBuilder } from "./paginationPost";
 import { housePostWithStatusBuilder } from "../housepost";
 
 export const paginateHouses = async (ctx: MyContext) => {
@@ -58,7 +56,7 @@ export const paginateHouses = async (ctx: MyContext) => {
           numberOfBedrooms: house.numberOfBedrooms,
           priceOfTheHouse: house.price,
           propertyType: house.propertyType,
-          subCity: house.propertyType,
+          subCity: house.subCity,
           woredaOrSpecificPlace: house.woredaOrSpecificPlace,
         }),
         {
@@ -105,7 +103,7 @@ export const getHouses = async (ctx: MyContext) => {
         numberOfBedrooms: house.numberOfBedrooms,
         priceOfTheHouse: house.price,
         propertyType: house.propertyType,
-        subCity: house.propertyType,
+        subCity: house.subCity,
         woredaOrSpecificPlace: house.woredaOrSpecificPlace,
       }),
       {
