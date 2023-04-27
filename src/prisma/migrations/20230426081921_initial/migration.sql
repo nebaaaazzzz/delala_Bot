@@ -11,9 +11,11 @@ CREATE TABLE `Session` (
 -- CreateTable
 CREATE TABLE `User` (
     `telegramId` VARCHAR(191) NOT NULL,
-    `firstName` VARCHAR(191) NULL,
-    `lastName` VARCHAR(191) NULL,
-    `userType` ENUM('BROKER', 'HOME_SEEKER') NOT NULL,
+    `telegramFirstName` VARCHAR(191) NULL,
+    `telegramLastName` VARCHAR(191) NULL,
+    `fullName` VARCHAR(191) NULL,
+    `subCity` VARCHAR(191) NULL,
+    `userType` ENUM('BROKER', 'HOME_SEEKER', 'ADMIN') NOT NULL,
     `language` ENUM('EN', 'AM') NOT NULL DEFAULT 'EN',
     `phoneNumber` VARCHAR(191) NULL,
     `userName` VARCHAR(191) NULL,
@@ -36,8 +38,26 @@ CREATE TABLE `House` (
     `numberOfBathrooms` INTEGER NOT NULL,
     `housePostType` ENUM('RENT', 'SALE') NOT NULL,
     `price` DOUBLE NOT NULL,
-    `area` DOUBLE NOT NULL,
+    `area` VARCHAR(191) NOT NULL,
     `status` ENUM('APPROVED', 'PENDING', 'REJECTED') NOT NULL DEFAULT 'PENDING',
+    `userTelegramID` VARCHAR(191) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `HouseRequest` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `subCity` VARCHAR(191) NOT NULL,
+    `woredaOrSpecificPlace` VARCHAR(191) NOT NULL,
+    `propertyType` VARCHAR(191) NOT NULL,
+    `numberOfBedrooms` INTEGER NOT NULL,
+    `numberOfBathrooms` INTEGER NOT NULL,
+    `houseRequestType` ENUM('RENT', 'BUY') NOT NULL,
+    `price` DOUBLE NOT NULL,
+    `area` VARCHAR(191) NOT NULL,
     `userTelegramID` VARCHAR(191) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
@@ -58,6 +78,9 @@ CREATE TABLE `HouseImage` (
 
 -- AddForeignKey
 ALTER TABLE `House` ADD CONSTRAINT `House_userTelegramID_fkey` FOREIGN KEY (`userTelegramID`) REFERENCES `User`(`telegramId`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `HouseRequest` ADD CONSTRAINT `HouseRequest_userTelegramID_fkey` FOREIGN KEY (`userTelegramID`) REFERENCES `User`(`telegramId`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `HouseImage` ADD CONSTRAINT `HouseImage_houseId_fkey` FOREIGN KEY (`houseId`) REFERENCES `House`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

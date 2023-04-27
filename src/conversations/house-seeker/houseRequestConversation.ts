@@ -33,6 +33,7 @@ export async function houseRequestConversation(
   const houseRequestType = await conversation.form.select(
     [ctx.t("BUY_HOUSE"), ctx.t("RENT_HOUSE")],
     async (ctx) => {
+      console.log("other");
       await handleCancelFromCtx(ctx);
     }
   );

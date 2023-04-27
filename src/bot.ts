@@ -11,6 +11,7 @@ import home_seekerRoutes from "./router/home_seeker.routes";
 import loginRoutes from "./router/login.routes";
 import { NOT_REGISTERD } from "./config/constants";
 import { MyContext, MyConversation } from "./types";
+import { Menu, MenuRange } from "@grammyjs/menu";
 
 bot.use(conversations());
 bot.use(router);
@@ -30,6 +31,23 @@ bot.start({
   onStart(botInfo) {
     console.log("Started on :", botInfo.username);
   },
+});
+const menu = new Menu("dynamic");
+menu
+  .url("About", "https://grammy.dev/plugins/menu")
+  .row()
+  .dynamic(() => {
+    // Generate a part of the menu dynamically!
+    const range = new MenuRange();
+    for (let i = 0; i < 3; i++) {
+      range.text(i.toString(), (ctx) => ctx.reply(`You chose ${i}`)).row();
+    }
+    return range;
+  })
+  .text("Cancel", (ctx) => ctx.deleteMessage());
+bot.use(menu);
+bot.command("test", async (ctx) => {
+  await ctx.reply("Check out this menu:", { reply_markup: menu });
 });
 //THIS CODE TO GET CHALLE ID
 // bot.on("channel_post", async (ctx) => {

@@ -13,8 +13,9 @@ import { User } from "../config/prisma";
 import { Language } from "@prisma/client";
 
 export default function (userRouter: Composer<MyContext>) {
-  userRouter.errorBoundary((e) => {},
-  createConversation(houseRequestConversation));
+  userRouter.errorBoundary((e) => {
+    console.log(e.message);
+  }, createConversation(houseRequestConversation));
   userRouter.errorBoundary((e) => {}, createConversation(settingConversation));
   userRouter.filter(hears("REQUEST_HOUSE"), async (ctx) => {
     await ctx.conversation.enter("houseRequestConversation");

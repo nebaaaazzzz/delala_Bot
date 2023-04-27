@@ -34,7 +34,7 @@ ABOUT_US = About Us
 TERMS_OF_USE = Terms of Use
 CANCEL = Cancel
 SUBMIT = Submit
-SUBCITIES = ["Addis Ketema" ,"Kaliti","Arada", "Bole","Gulele" ,"Kirkos" ,"Kolfe Keranio" ,"Lideta","Nifas Silk-Lafto","Yeka ,"Lemi Kura"	]
+SUBCITIES = ["Addis Ketema" ,"Kaliti","Arada", "Bole","Gulele" ,"Kirkos" ,"Kolfe Keranio" ,"Lideta","Nifas Silk-Lafto","Yeka" ,"Lemi Kura"	]
 PROPERTY_TYPES = ["Conduminum","Apartment","Villa","Real Estate Apartment","Commercial","Empty Land","Other"] 
 
 ## home seeker translations
