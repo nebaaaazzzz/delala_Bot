@@ -44,3 +44,4 @@ REQUEST_HOUSE = የቤት ጥያቄ
 RENT_HOUSE = የቤት ኪራይ
 BUY_HOUSE = ቤት ይግዙ
 success-lang-chng=ስኬታማ ቋንቋ ተለውጧል
+cng_lang = ቋንቋ ቀይር

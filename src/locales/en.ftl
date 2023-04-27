@@ -28,7 +28,7 @@ subcity = Subcity
 ## broker main menu translations
 SELL_HOUSE =  Sell House
 RENT_HOUSE = Rent house
-SETTING = Setting
+SETTING = Settings
 MY_HOUSES = My Houses
 ABOUT_US = About Us
 TERMS_OF_USE = Terms of Use
@@ -44,4 +44,5 @@ REQUEST_HOUSE = Request House
 RENT_HOUSE = Rent House
 BUY_HOUSE = Buy House
 success-lang-chng=successfuly language changed
+cng_lang = Change Language
 

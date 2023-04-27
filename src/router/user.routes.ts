@@ -9,6 +9,7 @@ import { hears } from "@grammyjs/i18n";
 import {
   getBrokerMainMenuKeyboard,
   getHomeSeekerMainMenuKeyboard,
+  getSettingsKeyboard,
   getUserMainMenuKeyboard,
   selectLanguageKeyboard,
 } from "../components/keyboards";
@@ -49,11 +50,20 @@ export default function (userRouter: Composer<MyContext>) {
       reply_markup: getHomeSeekerMainMenuKeyboard(ctx),
     });
   });
-
+  userRouter.filter(hears("back"), async (ctx) => {
+    await ctx.reply(ctx.t("mm"), {
+      reply_markup: getUserMainMenuKeyboard(ctx),
+    });
+  });
   userRouter.filter(hears("REQUEST_HOUSE"), async (ctx) => {
     await ctx.conversation.enter("houseRequestConversation");
   });
   userRouter.filter(hears("SETTING"), async (ctx) => {
+    await ctx.reply(ctx.t("SETTING"), {
+      reply_markup: getSettingsKeyboard(ctx),
+    });
+  });
+  userRouter.filter(hears("cng_lang"), async (ctx) => {
     await ctx.reply(ctx.t("SETTING"), {
       reply_markup: selectLanguageKeyboard,
     });

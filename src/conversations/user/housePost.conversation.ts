@@ -1,6 +1,7 @@
 import {
   getBrokerMainMenuKeyboard,
   getCancelKeyboard,
+  getUserMainMenuKeyboard,
 } from "../../components/keyboards";
 import { ADMIN_TELEGRAM_ID, SUBMIT } from "../../config/constants";
 import { MyContext, MyConversation, SessionData } from "../../types";
@@ -19,7 +20,7 @@ import bot from "../../config/botConfig";
 async function handleCancelFromCtx(ctx: MyContext) {
   if (ctx.message?.text == ctx.t("CANCEL")) {
     await ctx.reply(ctx.t("mm"), {
-      reply_markup: getBrokerMainMenuKeyboard(ctx),
+      reply_markup: getUserMainMenuKeyboard(ctx),
     });
     return await ctx.conversation.exit();
   }
@@ -66,7 +67,7 @@ export async function housePostConversation(
   const woredaOrSpecificPlace = await conversation.form.text();
   if (woredaOrSpecificPlace === ctx.t("CANCEL")) {
     await ctx.reply(ctx.t("mm"), {
-      reply_markup: getBrokerMainMenuKeyboard(ctx),
+      reply_markup: getUserMainMenuKeyboard(ctx),
     });
     return;
   }
@@ -89,7 +90,7 @@ export async function housePostConversation(
   const area = await conversation.form.text();
   if (area === ctx.t("CANCEL")) {
     await ctx.reply(ctx.t("mm"), {
-      reply_markup: getBrokerMainMenuKeyboard(ctx),
+      reply_markup: getUserMainMenuKeyboard(ctx),
     });
     return;
   }
@@ -180,7 +181,7 @@ export async function housePostConversation(
       });
     }
     await ctx.reply(ctx.t("success-submit-house"), {
-      reply_markup: getBrokerMainMenuKeyboard(ctx),
+      reply_markup: getUserMainMenuKeyboard(ctx),
     });
     message = await bot.api.sendMediaGroup(ADMIN_TELEGRAM_ID, [
       {
@@ -226,7 +227,7 @@ export async function housePostConversation(
     });
   } else {
     await ctx.reply(ctx.t("submission-cancle"), {
-      reply_markup: getBrokerMainMenuKeyboard(ctx),
+      reply_markup: getUserMainMenuKeyboard(ctx),
     });
   }
 }

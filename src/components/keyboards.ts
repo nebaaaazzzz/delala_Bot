@@ -95,7 +95,16 @@ export function getHomeSeekerMainMenuKeyboard(ctx: MyContext) {
     ],
   ]).resized(true);
 }
-
+export function getSettingsKeyboard(ctx: MyContext) {
+  return new Keyboard([
+    [{ text: ctx.t("cng_lang") }],
+    [
+      {
+        text: ctx.t("back"),
+      },
+    ],
+  ]).resized(true);
+}
 export function getSelectSubCityKeyboard(ctx: MyContext) {
   return new Keyboard(
     [...JSON.parse(ctx.t("SUBCITIES"))].map((subCity) => [{ text: subCity }])
