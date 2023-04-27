@@ -1,12 +1,16 @@
 import { Router } from "@grammyjs/router";
-import { UserType } from "@prisma/client";
 import { User } from "./prisma";
-import { ADMIN_TELEGRAM_USERNAME, NOT_REGISTERD } from "./constants";
+import {
+  ADMIN_TELEGRAM_USERNAME,
+  REGISTERED,
+  NOT_REGISTERED,
+  ADMIN,
+} from "./constants";
 import { MyContext } from "../types";
 
 const router = new Router<MyContext>(async (ctx) => {
   if (ctx.from?.username == ADMIN_TELEGRAM_USERNAME) {
-    return UserType.ADMIN;
+    return ADMIN;
   }
   if (ctx.from?.id) {
     const result = await User.findFirst({
@@ -15,16 +19,12 @@ const router = new Router<MyContext>(async (ctx) => {
       },
     });
     if (result) {
-      if (result.userType === UserType.BROKER) {
-        return UserType.BROKER;
-      } else if (result.userType === UserType.HOME_SEEKER) {
-        return UserType.HOME_SEEKER;
-      }
+      return REGISTERED;
     } else {
-      return NOT_REGISTERD;
+      return NOT_REGISTERED;
     }
   } else {
-    return NOT_REGISTERD;
+    return NOT_REGISTERED;
   }
 });
 

@@ -15,9 +15,6 @@ export default function (loginRouter: Composer<MyContext>) {
     await ctx.reply("Select language / ቋንቋ ይምረጡ ", {
       reply_markup: selectLanguageKeyboard,
     });
-
-    // const language = await conversation.form.select([EN_LANGUAGE, AM_LANGUAGE]);
-    // await ctx.conversation.enter("greetingConversation");
   });
   loginRouter.hears([AM_LANGUAGE, EN_LANGUAGE], async (ctx) => {
     const language = ctx.message?.text;

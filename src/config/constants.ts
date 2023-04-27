@@ -43,4 +43,6 @@ export const HOUSES = "Houses";
 export const BROKERS = "Brokers";
 export const HOME_SEEKERS = "Home Seekers";
 export const SUBMIT = "Submit";
-export const NOT_REGISTERD = "NOT_REGISTED";
+export const NOT_REGISTERED = "NOT_REGISTERED";
+export const REGISTERED = "REGISTERED";
+export const ADMIN = "ADMIN";

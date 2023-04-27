@@ -36,24 +36,19 @@ export function getSharePhoneKeyboard(ctx: MyContext) {
     .oneTime(true)
     .resized(true);
 }
-
-export function getBrokerMainMenuKeyboard(ctx: MyContext) {
+export function getUserMainMenuKeyboard(ctx: MyContext) {
   return new Keyboard([
     [
       {
-        text: ctx.t("SELL_HOUSE"),
+        text: ctx.t("BROKER"),
       },
-
       {
-        text: ctx.t("RENT_HOUSE"),
+        text: ctx.t("HOME_SEEKER"),
       },
     ],
     [
       {
         text: ctx.t("SETTING"),
-      },
-      {
-        text: ctx.t("MY_HOUSES"),
       },
     ],
     [
@@ -62,6 +57,26 @@ export function getBrokerMainMenuKeyboard(ctx: MyContext) {
       },
       {
         text: ctx.t("TERMS_OF_USE"),
+      },
+    ],
+  ]).resized(true);
+}
+export function getBrokerMainMenuKeyboard(ctx: MyContext) {
+  return new Keyboard([
+    [
+      {
+        text: ctx.t("SELL_HOUSE"),
+      },
+      {
+        text: ctx.t("RENT_HOUSE"),
+      },
+    ],
+    [
+      {
+        text: ctx.t("MY_HOUSES"),
+      },
+      {
+        text: ctx.t("back"),
       },
     ],
   ]).resized(true);
@@ -75,15 +90,7 @@ export function getHomeSeekerMainMenuKeyboard(ctx: MyContext) {
     ],
     [
       {
-        text: ctx.t("SETTING"),
-      },
-      {
-        text: ctx.t("ABOUT_US"),
-      },
-    ],
-    [
-      {
-        text: ctx.t("TERMS_OF_USE"),
+        text: ctx.t("back"),
       },
     ],
   ]).resized(true);

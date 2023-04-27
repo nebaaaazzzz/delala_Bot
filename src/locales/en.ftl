@@ -36,7 +36,7 @@ CANCEL = Cancel
 SUBMIT = Submit
 SUBCITIES = ["Addis Ketema" ,"Kaliti","Arada", "Bole","Gulele" ,"Kirkos" ,"Kolfe Keranio" ,"Lideta","Nifas Silk-Lafto","Yeka" ,"Lemi Kura"	]
 PROPERTY_TYPES = ["Conduminum","Apartment","Villa","Real Estate Apartment","Commercial","Empty Land","Other"] 
-
+back = Back
 ## home seeker translations
 rent-buy = Do you want to rent or buy
 success-submit-request = Successfully submitted we will contact you with you requirement

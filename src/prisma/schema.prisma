@@ -14,11 +14,6 @@ enum Status {
   PENDING
   REJECTED
 }
-enum UserType {
-  BROKER
-  HOME_SEEKER
-  ADMIN
-}
 enum Language {
   EN
   AM
@@ -41,8 +36,6 @@ model User{
   telegramFirstName String?
   telegramLastName String? 
   fullName String?
-  subCity String?
-  userType UserType 
   language Language @default(EN)
   phoneNumber String? @unique
   userName String? @unique 
@@ -71,13 +64,9 @@ model  House{
 model  HouseRequest{
   id Int @id @default(autoincrement())
   subCity String
-  woredaOrSpecificPlace String
   propertyType String
   numberOfBedrooms Int
-  numberOfBathrooms Int
   houseRequestType HouseRequestType
-  price Float
-  area String
   userTelegramID String
   user  User @relation(fields: [userTelegramID], references: [telegramId] ,onDelete: Cascade) 
   createdAt DateTime @default(now())
