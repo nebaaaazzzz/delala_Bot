@@ -1,5 +1,5 @@
 import { createConversation } from "@grammyjs/conversations";
-import { AM_LANGUAGE, EN_LANGUAGE } from "../config/constants";
+import { AM_LANGUAGE, CANCEL, EN_LANGUAGE } from "../config/constants";
 import { Composer } from "grammy";
 import { MyContext } from "../types";
 import { houseRentPostConversation } from "../conversations/user/houseRentPostConversation";
@@ -21,15 +21,22 @@ import { settingConversation } from "../conversations/house-seeker/setting.conve
 export default function (userRouter: Composer<MyContext>) {
   /**==============CONVERSATION REGISTRATION START================ */
   //TODO : fix conversation might stuck in error
-  userRouter.errorBoundary((err) => {},
-  createConversation(houseRentPostConversation));
+  userRouter.errorBoundary((err) => {
+    console.log("house rent post conversaion : ", err.message);
+  }, createConversation(houseRentPostConversation));
   userRouter.errorBoundary(
-    (err) => {}, //error handler for conversation
+    (err) => {
+      console.log("house rent sell conversaion : ", err.message);
+    }, //error handler for conversation
     createConversation(houseSellPostConversation)
   );
   userRouter.errorBoundary((e) => {
     console.log(e.message);
   }, createConversation(houseRequestConversation));
+  userRouter.callbackQuery(CANCEL, async (ctx) => {
+    console.log("callback query cancel");
+    await ctx.conversation.reenter("houseRequestConversation");
+  });
   /**==============CONVERSATION REGISTRATION END================ */
 
   userRouter.filter(hears("RENT_HOUSE"), async (ctx) => {
@@ -59,6 +66,7 @@ export default function (userRouter: Composer<MyContext>) {
     await ctx.conversation.enter("houseRequestConversation");
   });
   userRouter.filter(hears("SETTING"), async (ctx) => {
+    console.log("Ssss  : ", await ctx.conversation);
     await ctx.reply(ctx.t("SETTING"), {
       reply_markup: getSettingsKeyboard(ctx),
     });
@@ -67,6 +75,9 @@ export default function (userRouter: Composer<MyContext>) {
     await ctx.reply(ctx.t("SETTING"), {
       reply_markup: selectLanguageKeyboard,
     });
+  });
+  userRouter.filter(hears("ABOUT_US"), async (ctx) => {
+    await ctx.reply(ctx.t("ABOUT_US_TEXT"));
   });
   userRouter.hears([EN_LANGUAGE, AM_LANGUAGE], async (ctx) => {
     const language = ctx.message?.text;

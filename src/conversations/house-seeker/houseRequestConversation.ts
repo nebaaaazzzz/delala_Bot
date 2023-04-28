@@ -116,8 +116,6 @@ export async function houseRequestConversation(
     );
     return;
   } else if (cbData.callbackQuery.data == CANCEL) {
-    await ctx.reply(ctx.t("submission-cancle"), {
-      reply_markup: getUserMainMenuKeyboard(ctx),
-    });
+    await houseRequestConversation(conversation, ctx);
   }
 }

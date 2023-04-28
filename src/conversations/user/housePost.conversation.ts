@@ -226,8 +226,6 @@ export async function housePostConversation(
       },
     });
   } else {
-    await ctx.reply(ctx.t("submission-cancle"), {
-      reply_markup: getUserMainMenuKeyboard(ctx),
-    });
+    await housePostConversation(conversation, ctx, housePostType);
   }
 }

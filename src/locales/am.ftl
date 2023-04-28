@@ -31,8 +31,14 @@ RENT_HOUSE = ቤት ማከራየት
 SETTING = ቅንብሮች
 MY_HOUSES = የእኔ ቤቶች
 ABOUT_US = ስለ እኛ
+ABOUT_US_TEXT = 
+ About Us
+ We are a real estate company dedicated to helping individuals and families find their dream homes. With years of experience in the industry, we have developed a deep understanding of the local real estate market and are committed to providing our clients with personalized and professional service. Our team of expert agents is knowledgeable about the latest trends and developments in the industry, and we work tirelessly to ensure that our clients find the perfect home at the right price. Whether you are buying or selling a property, we are here to help you every step of the way.
+ For more Information: @realtoralula
+ Contact Us: +251 91 451 4657
 TERMS_OF_USE = የአጠቃቀም መመሪያ
 CANCEL = ማቋረጥ
+EDIT = ማስተካከል
 SUBMIT = አስገባ
 SUBCITIES = ["አዲስ ከተማ" ,"አቃቂ ቃሊቲ" ,"አራዳ" ,"ቦሌ","ጉለሌ" ,"ቂርቆሰ" ,"ኮልፌ ቀራኒዮ" ,"ልደታ","ን/ስልክ ላፍቶ","የካ" ,"ለሚ ኩራ"	]
 PROPERTY_TYPES = ["ኮንደሚኒየም","አፖርትመንት","ቪላ","ሪልስቴት አፖርትመንት","ንግድ","ባዶ መሬት" ,"ሌላ"]

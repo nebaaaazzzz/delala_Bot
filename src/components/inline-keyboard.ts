@@ -6,7 +6,7 @@ export function getConfirmHousePostInlineKeyboard(ctx: MyContext) {
   return new InlineKeyboard([
     [
       {
-        text: ctx.t("CANCEL"),
+        text: ctx.t("EDIT"),
         callback_data: CANCEL,
       },
       {

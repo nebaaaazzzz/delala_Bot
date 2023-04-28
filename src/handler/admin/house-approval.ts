@@ -2,6 +2,7 @@ import bot from "../../config/botConfig";
 import {
   ADMIN_PHONE_NUMBER,
   ADMIN_TELEGRAM_ID,
+  ADMIN_TELEGRAM_USERNAME,
   CHANNEL_ID,
 } from "../../config/constants";
 import { House, HouseImage } from "../../config/prisma";
@@ -91,7 +92,9 @@ async function handleApproval(ctx: MyContext, status: "APPROVED" | "REJECTED") {
                 propertyType: house.propertyType,
               }) +
               `
-              <b>Contact </b>: ${ADMIN_PHONE_NUMBER}
+          FOR MORE INFORMATION PLEASE CONTACT Us
+          <b>Phone </b>: ${ADMIN_PHONE_NUMBER}
+          <b>Telegram </b>: @${ADMIN_TELEGRAM_USERNAME}
             `,
           },
           {
