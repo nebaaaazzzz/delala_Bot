@@ -41,6 +41,8 @@ ABOUT_US_TEXT =
 TERMS_OF_USE = Terms of Use
 CANCEL = Cancel
 EDIT = Edit
+CHANNEL= Channel
+CHANNEL_TEXT = CHANNEL_TEXT = You Search for houses that are already in the market from our REALTOReth Channel
 SUBMIT = Submit
 SUBCITIES = ["Addis Ketema" ,"Kaliti","Arada", "Bole","Gulele" ,"Kirkos" ,"Kolfe Keranio" ,"Lideta","Nifas Silk-Lafto","Yeka" ,"Lemi Kura"	]
 PROPERTY_TYPES = ["Conduminum","Apartment","Villa","Real Estate Apartment","Commercial","Empty Land","Other"] 

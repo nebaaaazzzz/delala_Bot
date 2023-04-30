@@ -12,7 +12,9 @@ HOME_SEEKER = ቤት ፈላጊ
 
 pls-shr-pic-z-house =እባኮትን የቤቱን {$imgLength} ፎቶዎች ያካፍሉ።
 Slct-sub-city-zhouse =የቤቱን  ክፍለ ከተማን ይምረጡ
-pprty-type=የንብረት አይነት
+pprty-type=የቤት አይነት
+CHANNEL=ቻናል
+CHANNEL_TEXT = ከ REALTOReth ቻናላችን በገበያ ላይ ያሉትን ቤቶች ይፈልጋሉ
 price-z-house = የቤቱ ዋጋ
 nmbr-bathrooms = የመታጠቢያዎች ቤት ክፍሎች ብዛት
 nmbr-bedrooms = የመኝታ ቤት ክፍሎች ብዛት 
@@ -32,10 +34,8 @@ SETTING = ቅንብሮች
 MY_HOUSES = የእኔ ቤቶች
 ABOUT_US = ስለ እኛ
 ABOUT_US_TEXT = 
- About Us
- We are a real estate company dedicated to helping individuals and families find their dream homes. With years of experience in the industry, we have developed a deep understanding of the local real estate market and are committed to providing our clients with personalized and professional service. Our team of expert agents is knowledgeable about the latest trends and developments in the industry, and we work tirelessly to ensure that our clients find the perfect home at the right price. Whether you are buying or selling a property, we are here to help you every step of the way.
- For more Information: @realtoralula
- Contact Us: +251 91 451 4657
+ እኛ ግለሰቦች እና ቤተሰቦች የህልም ቤታቸውን እንዲያገኙ የምንረዳ የሪል እስቴት ቴክኖሎጂ ኩባንያ ነን. በኢንዱስትሪው ውስጥ ለዓመታት ልምድ ስላለን ስለ ሪል እስቴት ኢንዱስትሪ ጥልቅ ግንዛቤ አዳብረን ለደንበኞቻችን ግላዊ እና ሙያዊ አገልግሎት ለመስጠት ቆርጠናል. የባለሙያ ወኪሎቻችን ቡድን በኢንዱስትሪው ውስጥ ስላለው የቅርብ ጊዜ አዝማሚያዎች እና እድገቶች እውቀት ያለው ነው ፣ እናም ደንበኞቻችን በትክክለኛው ዋጋ ትክክለኛውን ቤት እንዲያገኙ ለማድረግ ደከመኝ ሰለቸኝ ሳንል እናገለግሎታን. ንብረት እየገዙም ሆነ እየሸጡ ፣ እኛ እያንዳንዱን ደረጃ እርስዎን ለማገዝ እዚህ መጥተናል.
+ ለተጨማሪ መረጃ @realtoralula
 TERMS_OF_USE = የአጠቃቀም መመሪያ
 CANCEL = ማቋረጥ
 EDIT = ማስተካከል

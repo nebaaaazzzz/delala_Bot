@@ -62,6 +62,21 @@ export default function (userRouter: Composer<MyContext>) {
       reply_markup: getUserMainMenuKeyboard(ctx),
     });
   });
+
+  userRouter.filter(hears("CHANNEL"), async (ctx) => {
+    ctx.reply(ctx.t("CHANNEL_TEXT"), {
+      reply_markup: {
+        inline_keyboard: [
+          [
+            {
+              text: ctx.t("CHANNEL"),
+              url: "https://t.me/+LglF5WEWWERlZWM8",
+            },
+          ],
+        ],
+      },
+    });
+  });
   userRouter.filter(hears("REQUEST_HOUSE"), async (ctx) => {
     await ctx.conversation.enter("houseRequestConversation");
   });

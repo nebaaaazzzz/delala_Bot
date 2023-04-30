@@ -11,6 +11,9 @@ import { ADMIN, NOT_REGISTERED, REGISTERED } from "./config/constants";
 
 bot.use(conversations());
 bot.use(router);
+bot.use((ctx, next) => {
+  console.log(ctx.chat.id);
+});
 adminRoutes(router.route(ADMIN));
 loginRoutes(router.route(NOT_REGISTERED));
 userRoutes(router.route(REGISTERED));
@@ -21,7 +24,9 @@ userRoutes(router.route(REGISTERED));
 // bot.command("language", async (ctx) => {
 //   await ctx.conversation.enter("testConversation");
 // });
-
+// bot.on(":text", async (ctx) => {
+//   console.log(ctx.chat.id);
+// });
 //THIS CODE TO GET CHALLE ID
 // bot.on("channel_post", async (ctx) => {
 //   console.log(ctx.chat.id);

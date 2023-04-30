@@ -90,6 +90,11 @@ export function getHomeSeekerMainMenuKeyboard(ctx: MyContext) {
     ],
     [
       {
+        text: ctx.t("CHANNEL"),
+      },
+    ],
+    [
+      {
         text: ctx.t("back"),
       },
     ],
