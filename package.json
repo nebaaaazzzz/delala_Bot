@@ -5,7 +5,8 @@
   "type": "commonjs",
   "main": "build/bot.js",
   "scripts": {
-    "dev": "nodemon"
+    "dev": "nodemon",
+    "build": "swc ./src -d build"
   },
   "author": "nebiyu",
   "license": "ISC",
