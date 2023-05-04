@@ -1,0 +1,83 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+enum Status {
+  APPROVED
+  PENDING
+  REJECTED
+}
+enum Language {
+  EN
+  AM
+}
+enum HousePostType {
+  RENT
+  SALE
+}
+enum HouseRequestType {
+  RENT
+  BUY
+}
+model Session {
+  id    Int    @id @default(autoincrement())
+  key   String @unique
+  value String @db.LongText()
+}
+model User{
+  telegramId String  @id @unique 
+  telegramFirstName String?
+  telegramLastName String? 
+  fullName String?
+  language Language @default(EN)
+  phoneNumber String? @unique
+  userName String? @unique 
+  houses House[]
+  houseRequests HouseRequest[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model  House{
+  id Int @id @default(autoincrement())
+  subCity String
+  woredaOrSpecificPlace String
+  propertyType String
+  houseImages HouseImage[]
+  numberOfBedrooms Int
+  numberOfBathrooms Int
+  housePostType HousePostType
+  price Float
+  area String
+  status Status @default(PENDING)
+  userTelegramID String
+  user  User @relation(fields: [userTelegramID], references: [telegramId] ,onDelete: Cascade) 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model  HouseRequest{
+  id Int @id @default(autoincrement())
+  subCity String
+  propertyType String
+  numberOfBedrooms Int
+  houseRequestType HouseRequestType
+  userTelegramID String
+  user  User @relation(fields: [userTelegramID], references: [telegramId] ,onDelete: Cascade) 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model HouseImage {
+  id Int @id @default(autoincrement())
+  image String
+  houseId Int
+  house House @relation(fields: [houseId], references: [id] ,onDelete: Cascade) 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
