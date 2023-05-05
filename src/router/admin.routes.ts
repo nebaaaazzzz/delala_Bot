@@ -3,6 +3,8 @@ import {
   BROKERS,
   HOME_SEEKERS,
   HOUSES,
+  USER,
+  USERS,
 } from "../config/constants";
 import { approveHouse, rejectHouse } from "../handler/admin/house-approval";
 import { MyContext } from "../types";
@@ -20,7 +22,7 @@ export default function (adminRouter: Composer<MyContext>) {
     });
   });
 
-  adminRouter.hears(HOME_SEEKERS, getUsers);
+  adminRouter.hears(USER, getUsers);
   adminRouter.callbackQuery(/^(\/user\/page\/.+)/gi, paginateUsers);
 
   adminRouter.hears(HOUSES, getHouses);

@@ -32,19 +32,19 @@ async function bootstrap() {
     bot.command("language", async (ctx) => {
       await ctx.conversation.enter("testConversation");
     });
-    bot.on(":text", async (ctx) => {
-      console.log(ctx.chat.id);
-    });
+    // bot.on(":text", async (ctx) => {
+    //   console.log(ctx.chat.id);
+    // });
     // THIS CODE TO GET CHALLE ID
     // bot.on("channel_post", async (ctx) => {
     //   console.log(ctx.chat.id);
     // });
-    bot.command("test", async (ctx) => {
-      // await bot.api.sendMessage(CHANNEL_ID, "TEST123");
-      await ctx.reply(` ${1.1} `, {
-        parse_mode: "HTML",
-      });
-    });
+    // bot.command("test", async (ctx) => {
+    //   // await bot.api.sendMessage(CHANNEL_ID, "TEST123");
+    //   await ctx.reply(` ${1.1} `, {
+    //     parse_mode: "HTML",
+    //   });
+    // });
     bot.catch((err) => {
       const ctx = err.ctx;
       console.error(`Error while handling update ${ctx.update.update_id}:`);

@@ -4,6 +4,7 @@ export const BROKER = "Broker";
 export const HOME_SEEKER = "Home Seeker";
 export const LANGUAGES = [EN_LANGUAGE, AM_LANGUAGE];
 export const USERS = [BROKER, HOME_SEEKER];
+export const USER = "USERS";
 export const SETTING = "setting";
 export const CANCEL = "cancel";
 

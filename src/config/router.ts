@@ -9,9 +9,7 @@ import { MyContext } from "../types";
 import { User } from "../entity/User";
 
 const router = new Router<MyContext>(async (ctx) => {
-  console.log(ctx.from?.username == ADMIN_TELEGRAM_USERNAME);
   if (ctx.from?.username == ADMIN_TELEGRAM_USERNAME) {
-    console.log("admin");
     return ADMIN;
   }
   if (ctx.from?.id) {

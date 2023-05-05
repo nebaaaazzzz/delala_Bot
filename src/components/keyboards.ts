@@ -5,6 +5,7 @@ import {
   EN_LANGUAGE,
   HOME_SEEKERS,
   HOUSES,
+  USER,
 } from "../config/constants";
 import { MyContext } from "../types";
 
@@ -154,12 +155,7 @@ export const selectLanguageKeyboard = new Keyboard([
 export const adminKeyboard = new Keyboard([
   [
     {
-      text: BROKERS,
-    },
-  ],
-  [
-    {
-      text: HOME_SEEKERS,
+      text: USER,
     },
   ],
   [
