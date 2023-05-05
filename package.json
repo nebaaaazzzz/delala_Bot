@@ -6,7 +6,8 @@
   "main": "build/bot.js",
   "scripts": {
     "dev": "nodemon",
-    "build": "swc ./src -d build"
+    "build": "swc ./src -d build",
+    "Start": "node build/bot.js"
   },
   "author": "nebiyu",
   "license": "ISC",
