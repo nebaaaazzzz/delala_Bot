@@ -26,6 +26,7 @@ success-submit-house = Successfully submitted the house wait for a review
 submission-cancle = Submission cancled
 no-house-posted = No Posted House to Display
 hw-pt-type=house post type
+hw-rq-type=house Request type
 subcity = Subcity
 ## broker main menu translations
 SELL_HOUSE =  Sell House

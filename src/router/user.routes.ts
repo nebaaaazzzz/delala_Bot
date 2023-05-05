@@ -13,10 +13,9 @@ import {
   getUserMainMenuKeyboard,
   selectLanguageKeyboard,
 } from "../components/keyboards";
-import { Language } from "@prisma/client";
-import { User } from "../config/db";
 import { houseRequestConversation } from "../conversations/house-seeker/houseRequestConversation";
 import { settingConversation } from "../conversations/house-seeker/setting.conversation";
+import { User } from "../entity/User";
 
 export default function (userRouter: Composer<MyContext>) {
   /**==============CONVERSATION REGISTRATION START================ */
@@ -91,19 +90,19 @@ export default function (userRouter: Composer<MyContext>) {
       reply_markup: selectLanguageKeyboard,
     });
   });
+  userRouter.command("start", async (ctx) => {
+    await ctx.reply(ctx.t("mm"), {
+      reply_markup: getUserMainMenuKeyboard(ctx),
+    });
+  });
   userRouter.filter(hears("ABOUT_US"), async (ctx) => {
     await ctx.reply(ctx.t("ABOUT_US_TEXT"));
   });
   userRouter.hears([EN_LANGUAGE, AM_LANGUAGE], async (ctx) => {
     const language = ctx.message?.text;
     await ctx.i18n.setLocale(language == AM_LANGUAGE ? "am" : "en");
-    await User.update({
-      data: {
-        language: AM_LANGUAGE == language ? Language.AM : Language.EN,
-      },
-      where: {
-        telegramId: String(ctx.from?.id),
-      },
+    await User.update(String(ctx.from?.id), {
+      language: AM_LANGUAGE == language ? "AM" : "EN",
     });
     await ctx.reply(ctx.t("success-lang-chng"), {
       reply_markup: getUserMainMenuKeyboard(ctx),

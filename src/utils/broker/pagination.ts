@@ -1,7 +1,7 @@
 import { InlineKeyboard } from "grammy";
 import { MyContext, SessionData } from "../../types";
-import { House } from "../../config/db";
 import { housePostWithStatusBuilder } from "../housepost";
+import { House } from "../../entity/House";
 
 const paginateHouse = async (ctx: MyContext) => {
   const session = ctx.session as SessionData;
@@ -12,16 +12,14 @@ const paginateHouse = async (ctx: MyContext) => {
     const currentPageNumber = session.pageNumber;
     const userId = ctx.from?.id;
     if (userId) {
-      const houses = await House.findMany({
-        where: {
-          userTelegramID: String(userId),
-        },
-        orderBy: [
-          {
-            createdAt: "desc",
-          },
-        ],
-      });
+      const houses = await House.getRepository()
+        .createQueryBuilder("house")
+        .leftJoinAndSelect("house.user", "user")
+        .where(String(userId))
+        .orderBy({
+          createdAt: "DESC",
+        })
+        .execute();
       if (houses.length) {
         const postedHouseLength = houses.length;
         const house = houses[currentPageNumber - 1];
@@ -81,16 +79,14 @@ const getMyHouses = async (ctx: MyContext) => {
 
   const userId = ctx.from?.id;
   if (userId) {
-    const houses = await House.findMany({
-      where: {
-        userTelegramID: String(userId),
-      },
-      orderBy: [
-        {
-          createdAt: "desc",
-        },
-      ],
-    });
+    const houses = await House.getRepository()
+      .createQueryBuilder("house")
+      .leftJoinAndSelect("house.user", "user")
+      .where(String(userId))
+      .orderBy({
+        createdAt: "DESC",
+      })
+      .execute();
     if (houses.length) {
       const userHousePostLength = houses.length;
 

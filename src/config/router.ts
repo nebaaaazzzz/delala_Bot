@@ -1,5 +1,4 @@
 import { Router } from "@grammyjs/router";
-import { User } from "./db";
 import {
   ADMIN_TELEGRAM_USERNAME,
   REGISTERED,
@@ -7,13 +6,16 @@ import {
   ADMIN,
 } from "./constants";
 import { MyContext } from "../types";
+import { User } from "../entity/User";
 
 const router = new Router<MyContext>(async (ctx) => {
+  console.log(ctx.from?.username == ADMIN_TELEGRAM_USERNAME);
   if (ctx.from?.username == ADMIN_TELEGRAM_USERNAME) {
+    console.log("admin");
     return ADMIN;
   }
   if (ctx.from?.id) {
-    const result = await User.findFirst({
+    const result = await User.findOne({
       where: {
         telegramId: String(ctx.from?.id),
       },

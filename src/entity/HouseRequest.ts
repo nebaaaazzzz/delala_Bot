@@ -1,38 +1,41 @@
 import {
+  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
   PrimaryColumn,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import { User } from "./User";
 
 @Entity()
-export class HouseRequest {
-  @PrimaryColumn()
-  id!: number;
+export class HouseRequest extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @Column()
-  subcity!: string;
+  @Column("varchar")
+  subCity: string;
 
-  @Column()
-  propertyType!: string;
+  @Column("varchar")
+  propertyType: string;
 
   @Column({ type: "int" })
-  numberOfBedrooms!: number;
+  numberOfBedrooms: number;
 
   @Column({
-    enum: ["RENT", "BUY"],
+    type: "varchar",
+    // enum: ["RENT", "BUY"],
   })
-  houseRequestType!: string;
+  houseRequestType: string;
 
   @ManyToOne(() => User, (user) => user.houseRequests)
-  user!: User;
+  user: User;
 
   @CreateDateColumn()
-  createdAt!: Date; // Creation date
+  createdAt: Date; // Creation date
 
   @UpdateDateColumn()
-  updatedAt!: Date;
+  updatedAt: Date;
 }

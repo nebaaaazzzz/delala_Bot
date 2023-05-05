@@ -1,4 +1,3 @@
-import { Status } from "@prisma/client";
 import { MyContext } from "../types";
 export function houseRequestBuilder({
   subCity,
@@ -37,6 +36,6 @@ export function houseRequestPostBuilder(
  <b>${ctx.t("subcity")} : </b> ${subCity}
 <b>${ctx.t("nmbr-bedrooms")} : </b> ${numberOfBedrooms}
 <b>${ctx.t("pprty-type")} :</b> ${propertyType},
-<b>${ctx.t("hw-pt-type")} : </b> ${housePostType}
+<b>${ctx.t("hw-rq-type")} : </b> ${housePostType}
 `;
 }

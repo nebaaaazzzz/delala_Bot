@@ -1,6 +1,4 @@
-import { User } from "@prisma/client";
-
-export function userBuilder(user: User): string {
+export function userBuilder(user: any): string {
   return `
   <b>full name = </b> ${user.fullName}
 <b>telegram first name = </b>     ${user.telegramFirstName}

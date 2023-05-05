@@ -1,28 +1,30 @@
 import {
+  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
   PrimaryColumn,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import { House } from "./House";
 
 @Entity()
-export class HouseImage {
-  @PrimaryColumn()
-  id!: number;
+export class HouseImage extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @Column()
-  image!: string;
+  @Column("varchar")
+  image: string;
 
   @ManyToOne(() => House, (house) => house.houseImages)
-  house!: House;
+  house: House;
 
   @CreateDateColumn()
-  createdAt!: Date; // Creation date
+  createdAt: Date; // Creation date
 
   @UpdateDateColumn()
-  updatedAt!: Date;
+  updatedAt: Date;
   // houseImages
 }

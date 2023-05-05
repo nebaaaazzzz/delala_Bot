@@ -1,4 +1,3 @@
-import { Status } from "@prisma/client";
 import { MyContext } from "../types";
 export function housePostBuilder(
   ctx: MyContext,
@@ -36,7 +35,7 @@ export function housePostBuilder(
 
 export function housePostWithStatusBuilder(
   ctx: MyContext,
-  status: Status,
+  status: string,
   {
     subCity,
     woredaOrSpecificPlace,

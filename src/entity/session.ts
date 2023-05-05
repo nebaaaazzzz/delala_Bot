@@ -1,17 +1,18 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Session {
-  @PrimaryColumn()
-  id!: number;
+  @PrimaryGeneratedColumn()
+  id: string;
 
   @Column({
     unique: true,
+    type: "varchar",
   })
-  key!: string;
+  key: string;
 
   @Column({
     type: "longtext",
   })
-  value!: string;
+  value: string;
 }

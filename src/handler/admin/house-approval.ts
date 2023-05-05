@@ -1,3 +1,4 @@
+import { getRepository } from "typeorm";
 import bot from "../../config/botConfig";
 import {
   ADMIN_PHONE_NUMBER,
@@ -5,16 +6,18 @@ import {
   ADMIN_TELEGRAM_USERNAME,
   CHANNEL_ID,
 } from "../../config/constants";
-import { House, HouseImage } from "../../config/db";
+import { House } from "../../entity/House";
 import { MyContext } from "../../types";
 import {
   housePostBuilder,
   housePostWithStatusBuilder,
 } from "../../utils/housepost";
+import { HouseImage } from "../../entity/HouseImage";
 const BOT_ID = "delalaet_bot";
 // approve house
 
 export const approveHouse = async (ctx: MyContext) => {
+  console.log("approve");
   await handleApproval(ctx, "APPROVED");
 };
 
@@ -31,7 +34,11 @@ async function handleApproval(ctx: MyContext, status: "APPROVED" | "REJECTED") {
     const splittedPath = ctx.callbackQuery?.data.split("/");
     const houseId = Number(splittedPath[3]);
     const captionId = Number(splittedPath[4]);
-    let house = await House.findUnique({
+    let house = await House.findOne({
+      relations: {
+        user: true,
+        houseImages: true,
+      },
       where: {
         id: houseId,
       },
@@ -39,22 +46,25 @@ async function handleApproval(ctx: MyContext, status: "APPROVED" | "REJECTED") {
     if (house?.status == status) {
       return await ctx.reply("House Already " + status);
     } else {
-      let house = await House.update({
+      await House.update(
+        {
+          id: houseId,
+        },
+        {
+          status: status,
+        }
+      );
+      let house = (await House.findOne({
+        relations: {
+          user: true,
+          houseImages: true,
+        },
         where: {
           id: houseId,
         },
-        include: {
-          user: true,
-        },
-        data: {
-          status: status,
-        },
-      });
-      const houseImages = await HouseImage.findMany({
-        where: {
-          houseId: house.id,
-        },
-      });
+      })) as House;
+      let houseImages = house.houseImages as HouseImage[];
+
       //update the message to show new status for the admin
       try {
         await bot.api.editMessageCaption(ADMIN_TELEGRAM_ID, captionId, {

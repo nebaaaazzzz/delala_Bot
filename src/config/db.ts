@@ -5,7 +5,7 @@ import { HouseImage } from "../entity/HouseImage";
 import { HouseRequest } from "../entity/HouseRequest";
 import { Session } from "../entity/session";
 
-export const AppDataSource = new DataSource({
+const AppDataSource = new DataSource({
   type: "mysql",
   host: "localhost",
   port: 3306,
@@ -18,3 +18,4 @@ export const AppDataSource = new DataSource({
   subscribers: [],
   migrations: [],
 });
+export default AppDataSource;

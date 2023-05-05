@@ -1,4 +1,3 @@
-import { HouseRequestType } from "@prisma/client";
 import { getConfirmHousePostInlineKeyboard } from "../../components/inline-keyboard";
 import {
   getCancelKeyboard,
@@ -8,13 +7,14 @@ import {
   getUserMainMenuKeyboard,
 } from "../../components/keyboards";
 import { ADMIN_TELEGRAM_ID, CANCEL, SUBMIT } from "../../config/constants";
-import { HouseRequest, User } from "../../config/db";
 import { MyContext, MyConversation } from "../../types";
 import bot from "../../config/botConfig";
 import {
   houseRequestBuilder,
   houseRequestPostBuilder,
 } from "../../utils/houseRequest";
+import { HouseRequest } from "../../entity/HouseRequest";
+import { User } from "../../entity/User";
 async function handleCancelFromCtx(ctx: MyContext) {
   if (ctx.message?.text == ctx.t("CANCEL")) {
     await ctx.reply(ctx.t("mm"), {
@@ -82,23 +82,27 @@ export async function houseRequestConversation(
   );
   const cbData = await conversation.waitFor("callback_query:data");
   if (cbData.callbackQuery.data == SUBMIT) {
-    await HouseRequest.create({
-      data: {
-        numberOfBedrooms,
-        subCity,
-        userTelegramID: String(ctx.from?.id),
-        propertyType,
-        houseRequestType:
-          houseRequestType == ctx.t("BUY_HOUSE")
-            ? HouseRequestType.BUY
-            : HouseRequestType.RENT,
-      },
+    await HouseRequest.insert({
+      numberOfBedrooms,
+      subCity,
+      user: (await User.findOne({
+        where: {
+          telegramId: String(ctx.from?.id),
+        },
+      })) as User,
+      // userTelegramID: String(ctx.from?.id),
+      propertyType,
+      houseRequestType:
+        houseRequestType == ctx.t("BUY_HOUSE") ? "BUY" : "RENT,",
     });
-    const user = await User.findUnique({
-      where: {
-        telegramId: String(ctx.from?.id),
-      },
-    });
+    const user = await User.findOne(
+      {
+        where: {
+          telegramId: String(ctx.from?.id),
+        },
+      }
+      // String(ctx.from?.id),
+    );
     await ctx.reply(ctx.t("success-submit-request"), {
       reply_markup: getUserMainMenuKeyboard(ctx),
     });

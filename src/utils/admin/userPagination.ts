@@ -1,25 +1,19 @@
 import { InlineKeyboard } from "grammy";
 import { MyContext, SessionData } from "../../types";
-import { User } from "../../config/db";
-import { UserType } from "@prisma/client";
 import { userBuilder } from "./paginationPost";
+import { User } from "../../entity/User";
 
-export const paginateHomeSeeker = async (ctx: MyContext) => {
+export const paginateUsers = async (ctx: MyContext) => {
   const session = ctx.session as SessionData;
   //["" , "house" , "page" , "param"]
   if (ctx.callbackQuery?.data) {
     const splittedPath = ctx.callbackQuery.data.split("/");
     session.adminUserPageNumber = Number(splittedPath[3]);
     const currentPageNumber = session.adminUserPageNumber;
-    const homeseekers = await User.findMany({
-      where: {
-        userType: UserType.HOME_SEEKER,
+    const homeseekers = await User.find({
+      order: {
+        createdAt: "DESC",
       },
-      orderBy: [
-        {
-          createdAt: "desc",
-        },
-      ],
     });
 
     if (homeseekers.length) {
@@ -29,30 +23,29 @@ export const paginateHomeSeeker = async (ctx: MyContext) => {
       if (currentPageNumber > 1) {
         inlineKeyboard.add({
           text: `«1`,
-          callback_data: `/home-seeker/page/1`,
+          callback_data: `/user/page/1`,
         });
       }
       if (currentPageNumber > 2) {
         inlineKeyboard.add({
           text: `‹${currentPageNumber - 1}`,
-          callback_data:
-            `/home-seeker/page/` + (currentPageNumber - 1).toString(),
+          callback_data: `/user/page/` + (currentPageNumber - 1).toString(),
         });
       }
       inlineKeyboard.add({
         text: `-${currentPageNumber}-`,
-        callback_data: `/home-seeker/page/` + currentPageNumber.toString(),
+        callback_data: `/user/page/` + currentPageNumber.toString(),
       });
       if (currentPageNumber < postedHouseLength - 1) {
         inlineKeyboard.add({
           text: `${currentPageNumber + 1}›`,
-          callback_data: `/home-seeker/page/${currentPageNumber + 1}`,
+          callback_data: `/user/page/${currentPageNumber + 1}`,
         });
       }
       if (currentPageNumber < postedHouseLength) {
         inlineKeyboard.add({
           text: `${postedHouseLength}»`,
-          callback_data: `/home-seeker/page/` + postedHouseLength.toString(),
+          callback_data: `/user/page/` + postedHouseLength.toString(),
         });
       }
 
@@ -67,38 +60,33 @@ export const paginateHomeSeeker = async (ctx: MyContext) => {
     //console.log(houses);
   }
 };
-export const getHomeSeekers = async (ctx: MyContext) => {
+export const getUsers = async (ctx: MyContext) => {
   const session = (await ctx.session) as SessionData;
 
-  const homeseekers = await User.findMany({
-    where: {
-      userType: UserType.HOME_SEEKER,
+  const users = await User.find({
+    order: {
+      createdAt: "DESC",
     },
-    orderBy: [
-      {
-        createdAt: "desc",
-      },
-    ],
   });
-  if (homeseekers.length) {
-    const userHousePostLength = homeseekers.length;
+  if (users.length) {
+    const userHousePostLength = users.length;
 
-    const homeseeker = homeseekers[0];
+    const homeseeker = users[0];
     session.adminUserPageNumber = 0;
     const inlineKeyboard = new InlineKeyboard();
-    inlineKeyboard.text(` -${1}›`, `/home-seeker/page/${1}`);
+    inlineKeyboard.text(` -${1}›`, `/user/page/${1}`);
     for (
       let i = 2;
       i <= (userHousePostLength > 5 ? 5 : userHousePostLength);
       i++
     ) {
-      inlineKeyboard.text(` ${i}`, `/home-seeker/page/${i}`);
+      inlineKeyboard.text(` ${i}`, `/user/page/${i}`);
     }
     await ctx.reply(userBuilder(homeseeker), {
       parse_mode: "HTML",
       reply_markup: inlineKeyboard,
     });
   } else {
-    await ctx.reply("No Home Seeer to Display");
+    await ctx.reply("No User to Display");
   }
 };

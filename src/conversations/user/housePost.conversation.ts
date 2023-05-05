@@ -14,9 +14,10 @@ import {
   housePostWithStatusBuilder,
 } from "../../utils/housepost";
 import { getConfirmHousePostInlineKeyboard } from "../../components/inline-keyboard";
-import { House, HouseImage } from "../../config/db";
-import { HousePostType } from "@prisma/client";
 import bot from "../../config/botConfig";
+import { House } from "../../entity/House";
+import { HouseImage } from "../../entity/HouseImage";
+import { User } from "../../entity/User";
 async function handleCancelFromCtx(ctx: MyContext) {
   if (ctx.message?.text == ctx.t("CANCEL")) {
     await ctx.reply(ctx.t("mm"), {
@@ -28,7 +29,7 @@ async function handleCancelFromCtx(ctx: MyContext) {
 export async function housePostConversation(
   conversation: MyConversation,
   ctx: MyContext,
-  housePostType: HousePostType
+  housePostType: any
 ) {
   let message;
   let imgArray = [];
@@ -157,29 +158,30 @@ export async function housePostConversation(
   const cbData = await conversation.waitFor("callback_query:data");
   let submitted = cbData.callbackQuery.data == SUBMIT;
   if (submitted) {
-    const house = await House.create({
-      data: {
-        numberOfBathrooms,
-        numberOfBedrooms,
-        subCity,
-        userTelegramID: String(ctx.from?.id),
-        woredaOrSpecificPlace,
-        area,
-        propertyType,
-        housePostType: housePostType,
-        price: priceOfTheHouse,
-      },
-    });
+    let houseImageArray: HouseImage[] = [];
     for (let i = 0; i < 3; i++) {
-      await HouseImage.create({
-        data: {
-          houseId: house.id,
-          image: imgArray[i] as string,
-          // houseID: house.id,
-          // imageID: messagId[i],
-        },
-      });
+      const houseImage = new HouseImage();
+      houseImage.image = imgArray[i] as string;
+      houseImageArray.push(houseImage);
+      await houseImage.save();
     }
+    const house = new House();
+    house.area = area;
+    house.numberOfBathrooms = numberOfBathrooms;
+    house.numberOfBedrooms = numberOfBedrooms;
+    house.subCity = subCity;
+    house.user = (await User.findOne({
+      where: {
+        telegramId: String(ctx.from?.id),
+      },
+    })) as User;
+    house.price = priceOfTheHouse;
+    house.housePostType = housePostType;
+    house.woredaOrSpecificPlace = woredaOrSpecificPlace;
+    house.propertyType = propertyType;
+    house.houseImages = houseImageArray;
+    const savedHouse = await house.save();
+    console.log(savedHouse);
     await ctx.reply(ctx.t("success-submit-house"), {
       reply_markup: getUserMainMenuKeyboard(ctx),
     });
@@ -188,7 +190,7 @@ export async function housePostConversation(
         type: "photo",
         media: imgArray[0] as string,
         parse_mode: "HTML",
-        caption: housePostWithStatusBuilder(ctx, house.status, {
+        caption: housePostWithStatusBuilder(ctx, "PENDING", {
           area,
           numberOfBathrooms,
           numberOfBedrooms,
@@ -214,11 +216,11 @@ export async function housePostConversation(
         inline_keyboard: [
           [
             {
-              callback_data: `/house/approve/${house.id}/${message[0].message_id}`,
+              callback_data: `/house/approve/${savedHouse.id}/${message[0].message_id}`,
               text: "Approve",
             },
             {
-              callback_data: `/house/reject/${house.id}/${message[0].message_id}`,
+              callback_data: `/house/reject/${savedHouse.id}/${message[0].message_id}`,
               text: "Reject",
             },
           ],

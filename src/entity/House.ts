@@ -1,66 +1,67 @@
 import {
+  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
   OneToMany,
   PrimaryColumn,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import { User } from "./User";
 import { HouseImage } from "./HouseImage";
 
 @Entity()
-export class House {
-  @PrimaryColumn()
-  id!: number;
+export class House extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @Column()
-  subCity!: string;
+  @Column("varchar")
+  subCity: string;
 
-  @Column()
-  woredaOrSpecificPlace!: string;
+  @Column("varchar")
+  woredaOrSpecificPlace: string;
 
-  @Column()
-  propertyType!: string;
+  @Column("varchar")
+  propertyType: string;
 
-  @Column()
-  numberOfBedrooms!: number;
+  @Column("int")
+  numberOfBedrooms: number;
 
-  @Column()
-  numberOfBathrooms!: number;
+  @Column("int")
+  numberOfBathrooms: number;
 
   @Column({
-    enum: ["RENT", "SELL"],
+    type: "varchar",
+    // enum: ["RENT", "SELL"],
   })
-  housePostType!: string;
+  housePostType: string;
 
   @Column({
     type: "float",
   })
-  price!: number;
+  price: number;
 
-  @Column()
-  area!: string;
+  @Column("varchar")
+  area: string;
 
   @Column({
+    type: "varchar",
     default: "PENDING",
-    enum: ["APPROVED", "REJECTED", "PENDING"],
+    // enum: ["APPROVED", "REJECTED", "PENDING"],
   })
-  status!: string;
-
-  @Column()
-  description!: string;
+  status: string;
 
   @ManyToOne(() => User, (user) => user.houses)
-  user!: User;
+  user: User;
 
   @OneToMany(() => HouseImage, (houseImage) => houseImage.house)
-  houseImages!: HouseImage[];
+  houseImages: HouseImage[];
 
   @CreateDateColumn()
-  createdAt!: Date; // Creation date
+  createdAt: Date; // Creation date
 
   @UpdateDateColumn()
-  updatedAt!: Date;
+  updatedAt: Date;
 }

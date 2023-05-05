@@ -1,7 +1,7 @@
 import { InlineKeyboard } from "grammy";
 import { MyContext, SessionData } from "../../types";
-import { House, User } from "../../config/db";
 import { housePostWithStatusBuilder } from "../housepost";
+import { House } from "../../entity/House";
 
 export const paginateHouses = async (ctx: MyContext) => {
   const session = ctx.session as SessionData;
@@ -10,12 +10,10 @@ export const paginateHouses = async (ctx: MyContext) => {
     const splittedPath = ctx.callbackQuery.data.split("/");
     session.adminUserPageNumber = Number(splittedPath[3]);
     const currentPageNumber = session.adminUserPageNumber;
-    const houses = await House.findMany({
-      orderBy: [
-        {
-          createdAt: "desc",
-        },
-      ],
+    const houses = await House.find({
+      order: {
+        createdAt: "DESC",
+      },
     });
 
     if (houses.length) {
@@ -74,12 +72,10 @@ export const paginateHouses = async (ctx: MyContext) => {
 export const getHouses = async (ctx: MyContext) => {
   const session = (await ctx.session) as SessionData;
 
-  const houses = await House.findMany({
-    orderBy: [
-      {
-        createdAt: "desc",
-      },
-    ],
+  const houses = await House.find({
+    order: {
+      createdAt: "DESC",
+    },
   });
   if (houses.length) {
     const userHousePostLength = houses.length;

@@ -1,10 +1,9 @@
-import { Language } from "@prisma/client";
 import {
   getHomeSeekerMainMenuKeyboard,
   selectLanguageKeyboard,
 } from "../../components/keyboards";
 import { AM_LANGUAGE, EN_LANGUAGE } from "../../config/constants";
-import { User } from "../../config/db";
+import { User } from "../../entity/User";
 import { MyContext, MyConversation } from "../../types";
 async function handleCancelFromCtx(ctx: MyContext) {
   if (ctx.message?.text == ctx.t("CANCEL")) {
@@ -24,14 +23,14 @@ export async function settingConversation(
   });
   const lang = await conversation.form.select([EN_LANGUAGE, AM_LANGUAGE]);
   await ctx.i18n.setLocale(lang == EN_LANGUAGE ? "en" : "am");
-  await User.update({
-    data: {
-      language: AM_LANGUAGE == lang ? Language.AM : Language.EN,
-    },
-    where: {
+  await User.update(
+    {
       telegramId: String(ctx.from?.id),
     },
-  });
+    {
+      language: AM_LANGUAGE == lang ? "AM" : "EN",
+    }
+  );
   await ctx.reply(ctx.t("success-lang-chng"), {
     reply_markup: getHomeSeekerMainMenuKeyboard(ctx),
   });

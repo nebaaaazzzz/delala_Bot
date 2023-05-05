@@ -2,11 +2,13 @@
 // import { MyContext } from "../types";
 
 import { I18n, I18nFlavor } from "@grammyjs/i18n";
-import { PrismaAdapter } from "@grammyjs/storage-prisma";
 import { Bot, Context, SessionFlavor, session } from "grammy";
-import { Session } from "./db";
 import { ConversationFlavor } from "@grammyjs/conversations";
 import { MyContext } from "../types";
+import { TypeormAdapter } from "@grammyjs/storage-typeorm";
+import { getRepository } from "typeorm";
+import { Session } from "../entity/session";
+import dataSource from "./db";
 
 // const bot = new Bot<MyContext>(process.env.TELEGRAM_TOKEN);
 
@@ -14,7 +16,9 @@ interface SessionData {
   __language_code?: string;
 }
 
-const bot = new Bot<MyContext>(process.env.TELEGRAM_TOKEN);
+const bot = new Bot<MyContext>(
+  "5924425080:AAHCQe6j6O6W0Fn6sAWz1DHkj879VDhdOmA"
+);
 
 export const i18n = new I18n<MyContext>({
   defaultLocale: "en",
@@ -29,7 +33,9 @@ bot.use(
     initial: () => {
       return {};
     },
-    storage: new PrismaAdapter(Session),
+    storage: new TypeormAdapter({
+      repository: dataSource.getRepository(Session),
+    }),
   })
 );
 

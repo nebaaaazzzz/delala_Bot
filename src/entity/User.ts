@@ -1,4 +1,5 @@
 import {
+  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
@@ -10,39 +11,49 @@ import { House } from "./House";
 import { HouseRequest } from "./HouseRequest";
 
 @Entity()
-export class User {
-  @PrimaryColumn()
-  telegramId!: String;
-
-  @Column()
-  telegramFirstName!: string;
-
-  @Column()
-  telegramLastName!: string;
-
-  @Column()
-  fullName!: string;
+export class User extends BaseEntity {
+  @PrimaryColumn("varchar")
+  telegramId: string;
 
   @Column({
-    enum: ["EN", "AM"],
+    type: "varchar",
+    default: "",
   })
-  language!: string;
+  telegramFirstName: string;
 
-  @Column()
-  phoneNumber!: string;
+  @Column({
+    type: "varchar",
+    default: "",
+  })
+  telegramLastName: string;
 
-  @Column()
-  userName!: string;
+  @Column("varchar")
+  fullName: string;
+
+  @Column({
+    type: "varchar",
+    // enum: ["EN", "AM"],
+  })
+  language: string;
+
+  @Column("varchar")
+  phoneNumber: string;
+
+  @Column({
+    type: "varchar",
+    default: "",
+  })
+  userName: string;
 
   @OneToMany(() => House, (house) => house.user)
-  houses!: House[];
+  houses: House[];
 
   @OneToMany(() => HouseRequest, (houseRequest) => houseRequest.user)
-  houseRequests!: HouseRequest[];
+  houseRequests: HouseRequest[];
 
   @CreateDateColumn()
-  createdAt!: Date; // Creation date
+  createdAt: Date; // Creation date
 
   @UpdateDateColumn()
-  updatedAt!: Date;
+  updatedAt: Date;
 }

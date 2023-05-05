@@ -1,11 +1,10 @@
-import { Language } from "@prisma/client";
 import {
   getUserMainMenuKeyboard,
   getSharePhoneKeyboard,
 } from "../components/keyboards";
-import { User } from "../config/db";
 import { MyContext, MyConversation } from "../types";
 import { i18n } from "../config/botConfig";
+import { User } from "../entity/User";
 export default async function greetingConversation(
   conversation: MyConversation,
   ctx: MyContext
@@ -21,17 +20,14 @@ export default async function greetingConversation(
     },
   });
   const fullName = await conversation.form.text();
-  await User.create({
-    data: {
-      telegramId: String(ctx.from?.id),
-      telegramFirstName: ctx.from?.first_name,
-      telegramLastName: ctx.from?.last_name,
-      fullName,
-      phoneNumber: contact.message?.contact?.phone_number,
-      language:
-        (await ctx.i18n.getLocale()) == "am" ? Language.AM : Language.EN,
-      userName: ctx.from?.username,
-    },
+  await User.insert({
+    telegramId: String(ctx.from?.id),
+    telegramFirstName: ctx.from?.first_name,
+    telegramLastName: ctx.from?.last_name,
+    fullName,
+    phoneNumber: contact.message?.contact?.phone_number,
+    language: (await ctx.i18n.getLocale()) == "am" ? "AM" : "EN",
+    userName: ctx.from?.username,
   });
   await ctx.reply(ctx.t("success-registerd"), {
     reply_markup: getUserMainMenuKeyboard(ctx),
