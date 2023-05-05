@@ -14,7 +14,7 @@ import {
   selectLanguageKeyboard,
 } from "../components/keyboards";
 import { Language } from "@prisma/client";
-import { User } from "../config/prisma";
+import { User } from "../config/db";
 import { houseRequestConversation } from "../conversations/house-seeker/houseRequestConversation";
 import { settingConversation } from "../conversations/house-seeker/setting.conversation";
 

@@ -8,7 +8,7 @@ import {
   getUserMainMenuKeyboard,
 } from "../../components/keyboards";
 import { ADMIN_TELEGRAM_ID, CANCEL, SUBMIT } from "../../config/constants";
-import { HouseRequest, User } from "../../config/prisma";
+import { HouseRequest, User } from "../../config/db";
 import { MyContext, MyConversation } from "../../types";
 import bot from "../../config/botConfig";
 import {

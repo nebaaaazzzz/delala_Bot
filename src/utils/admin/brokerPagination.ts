@@ -1,6 +1,6 @@
 import { InlineKeyboard } from "grammy";
 import { MyContext, SessionData } from "../../types";
-import { User } from "../../config/prisma";
+import { User } from "../../config/db";
 import { UserType } from "@prisma/client";
 import { userBuilder } from "./paginationPost";
 

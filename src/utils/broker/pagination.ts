@@ -1,6 +1,6 @@
 import { InlineKeyboard } from "grammy";
 import { MyContext, SessionData } from "../../types";
-import { House } from "../../config/prisma";
+import { House } from "../../config/db";
 import { housePostWithStatusBuilder } from "../housepost";
 
 const paginateHouse = async (ctx: MyContext) => {

@@ -3,7 +3,7 @@ import {
   getUserMainMenuKeyboard,
   getSharePhoneKeyboard,
 } from "../components/keyboards";
-import { User } from "../config/prisma";
+import { User } from "../config/db";
 import { MyContext, MyConversation } from "../types";
 import { i18n } from "../config/botConfig";
 export default async function greetingConversation(

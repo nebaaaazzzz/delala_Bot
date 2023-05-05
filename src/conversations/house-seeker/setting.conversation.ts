@@ -4,7 +4,7 @@ import {
   selectLanguageKeyboard,
 } from "../../components/keyboards";
 import { AM_LANGUAGE, EN_LANGUAGE } from "../../config/constants";
-import { User } from "../../config/prisma";
+import { User } from "../../config/db";
 import { MyContext, MyConversation } from "../../types";
 async function handleCancelFromCtx(ctx: MyContext) {
   if (ctx.message?.text == ctx.t("CANCEL")) {

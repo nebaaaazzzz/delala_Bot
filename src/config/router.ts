@@ -1,5 +1,5 @@
 import { Router } from "@grammyjs/router";
-import { User } from "./prisma";
+import { User } from "./db";
 import {
   ADMIN_TELEGRAM_USERNAME,
   REGISTERED,

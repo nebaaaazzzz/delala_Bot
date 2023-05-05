@@ -4,7 +4,7 @@
 import { I18n, I18nFlavor } from "@grammyjs/i18n";
 import { PrismaAdapter } from "@grammyjs/storage-prisma";
 import { Bot, Context, SessionFlavor, session } from "grammy";
-import { Session } from "./prisma";
+import { Session } from "./db";
 import { ConversationFlavor } from "@grammyjs/conversations";
 import { MyContext } from "../types";
 

@@ -5,7 +5,7 @@ import {
   ADMIN_TELEGRAM_USERNAME,
   CHANNEL_ID,
 } from "../../config/constants";
-import { House, HouseImage } from "../../config/prisma";
+import { House, HouseImage } from "../../config/db";
 import { MyContext } from "../../types";
 import {
   housePostBuilder,

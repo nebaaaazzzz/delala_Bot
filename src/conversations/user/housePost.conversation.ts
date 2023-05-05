@@ -14,7 +14,7 @@ import {
   housePostWithStatusBuilder,
 } from "../../utils/housepost";
 import { getConfirmHousePostInlineKeyboard } from "../../components/inline-keyboard";
-import { House, HouseImage } from "../../config/prisma";
+import { House, HouseImage } from "../../config/db";
 import { HousePostType } from "@prisma/client";
 import bot from "../../config/botConfig";
 async function handleCancelFromCtx(ctx: MyContext) {

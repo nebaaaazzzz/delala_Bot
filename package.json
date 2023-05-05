@@ -22,9 +22,10 @@
     "@grammyjs/menu": "^1.2.0",
     "@grammyjs/ratelimiter": "^1.1.6",
     "@grammyjs/router": "^2.0.0",
-    "@grammyjs/storage-prisma": "^2.2.0",
-    "@prisma/client": "4.13.0",
     "dotenv": "^16.0.3",
-    "grammy": "^1.15.3"
+    "grammy": "^1.15.3",
+    "mysql2": "^3.2.4",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "^0.3.15"
   }
 }
