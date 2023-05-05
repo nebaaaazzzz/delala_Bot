@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "nodemon",
     "build": "swc ./src -d build",
-    "Start": "node build/bot.js"
+    "start": "node build/bot.js"
   },
   "author": "nebiyu",
   "license": "ISC",
