@@ -34,16 +34,10 @@ async function handleCancelFromCtx(ctx) {
 async function housePostConversation(conversation, ctx, housePostType) {
     let message;
     let imgArray = [];
-    let breakFoorLoop = false;
-    let x = 0;
-    for(let i = 1; imgArray.length < _constants.MAX_IMG_SIZE; i++){
-        console.log("break Foooor lO : ", x);
-        if (breakFoorLoop) {
-            break;
-        }
+    for(; imgArray.length < _constants.MAX_IMG_SIZE;){
         await ctx.reply(// IMG_SIZE - imgArray.lengthJ
         ctx.t("pls-shr-pic-z-house", {
-            imgLength: i
+            imgLength: _constants.MAX_IMG_SIZE - imgArray.length
         }), {
             reply_markup: imgArray.length >= 3 ? (0, _keyboards.getCancelWithDoneKeyboard)(ctx) // IF IMG ARRAY LENGTH IS GREATER THAN 3
              : (0, _keyboards.getCancelKeyboard)(ctx)

@@ -20,11 +20,12 @@ async function bootstrap() {
   ]);
   try {
     await AppDataSource.initialize();
+    // bot.use((ctx, next) => {
+    //   console.log(ctx.from?.username, " === : ", ctx?.chat.id);
+    //   next();
+    // });
     bot.use(conversations());
     bot.use(router);
-    // bot.use((ctx, next) => {
-    //   console.log(ctx.chat.id);
-    // });
     adminRoutes(router.route(ADMIN));
     loginRoutes(router.route(NOT_REGISTERED));
     userRoutes(router.route(REGISTERED));
