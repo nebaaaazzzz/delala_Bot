@@ -1,9 +1,14 @@
 import {
   getBrokerMainMenuKeyboard,
   getCancelKeyboard,
+  getCancelWithDoneKeyboard,
   getUserMainMenuKeyboard,
 } from "../../components/keyboards";
-import { ADMIN_TELEGRAM_ID, SUBMIT } from "../../config/constants";
+import {
+  ADMIN_TELEGRAM_ID,
+  MAX_IMG_SIZE,
+  SUBMIT,
+} from "../../config/constants";
 import { MyContext, MyConversation, SessionData } from "../../types";
 import {
   getSelectPropertyTypeKeyboardWithCancel,
@@ -18,12 +23,15 @@ import bot from "../../config/botConfig";
 import { House } from "../../entity/House";
 import { HouseImage } from "../../entity/HouseImage";
 import { User } from "../../entity/User";
+import { InputMediaPhoto } from "grammy/types";
 async function handleCancelFromCtx(ctx: MyContext) {
   if (ctx.message?.text == ctx.t("CANCEL")) {
     await ctx.reply(ctx.t("mm"), {
       reply_markup: getUserMainMenuKeyboard(ctx),
     });
     return await ctx.conversation.exit();
+  } else if (ctx.message?.text == ctx.t("DONE")) {
+    return true; // TO BREAK THE FOR LOOP
   }
 }
 export async function housePostConversation(
@@ -32,24 +40,33 @@ export async function housePostConversation(
   housePostType: any
 ) {
   let message;
-  let imgArray = [];
-  const IMG_SIZE = 3;
-  for (; imgArray.length < 3; ) {
+  let imgArray: string[] = [];
+  for (; imgArray.length < MAX_IMG_SIZE; ) {
     await ctx.reply(
-      // IMG_SIZE - imgArray.length
+      // IMG_SIZE - imgArray.lengthJ
       ctx.t("pls-shr-pic-z-house", {
-        imgLength: IMG_SIZE - imgArray.length,
+        imgLength: MAX_IMG_SIZE - imgArray.length,
       }),
       {
-        reply_markup: getCancelKeyboard(ctx),
+        reply_markup:
+          imgArray.length >= 3
+            ? getCancelWithDoneKeyboard(ctx) // IF IMG ARRAY LENGTH IS GREATER THAN 3
+            : getCancelKeyboard(ctx),
       }
     );
-    const img = await conversation.waitFor(":photo", {
-      otherwise: async (ctx) => {
-        return await handleCancelFromCtx(ctx);
-      },
-    });
-    imgArray.push(img.message?.photo[0].file_id);
+    const img = await conversation.waitFor([":text", ":photo"]);
+    if (img.message?.photo) {
+      imgArray.push(img.message?.photo[0].file_id as string);
+    } else {
+      if (img.message?.text == ctx.t("DONE")) {
+        break;
+      } else if (img.message?.text == ctx.t("CANCEL")) {
+        await ctx.reply(ctx.t("mm"), {
+          reply_markup: getUserMainMenuKeyboard(ctx),
+        });
+        return await ctx.conversation.exit();
+      }
+    }
   }
   await ctx.reply(ctx.t("Slct-sub-city-zhouse"), {
     reply_markup: getSelectSubCityKeyboardWithCancel(ctx),
@@ -139,14 +156,14 @@ export async function housePostConversation(
         housePostType,
       }),
     },
-    {
-      type: "photo",
-      media: imgArray[1] as string,
-    },
-    {
-      type: "photo",
-      media: imgArray[2] as string,
-    },
+    ...(Array(MAX_IMG_SIZE - 1)
+      .fill(1)
+      .map((_, i) => {
+        return {
+          type: "photo",
+          media: imgArray[i + 1] as string,
+        };
+      }) as InputMediaPhoto[]),
   ]);
   await ctx.reply(ctx.t("cfirm-submit-house"), {
     reply_to_message_id: message[0].message_id,
@@ -159,7 +176,7 @@ export async function housePostConversation(
   let submitted = cbData.callbackQuery.data == SUBMIT;
   if (submitted) {
     let houseImageArray: HouseImage[] = [];
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < MAX_IMG_SIZE; i++) {
       const houseImage = new HouseImage();
       houseImage.image = imgArray[i] as string;
       houseImageArray.push(houseImage);
@@ -201,14 +218,14 @@ export async function housePostConversation(
           housePostType,
         }),
       },
-      {
-        type: "photo",
-        media: imgArray[1] as string,
-      },
-      {
-        type: "photo",
-        media: imgArray[2] as string,
-      },
+      ...(Array(MAX_IMG_SIZE - 1)
+        .fill(1)
+        .map((_, i) => {
+          return {
+            type: "photo",
+            media: imgArray[i + 1] as string,
+          };
+        }) as InputMediaPhoto[]),
     ]);
     await bot.api.sendMessage(ADMIN_TELEGRAM_ID, "confirm", {
       reply_to_message_id: message[0].message_id,

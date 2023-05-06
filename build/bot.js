@@ -20,6 +20,12 @@ function _interop_require_default(obj) {
 }
 _dotenv.default.config();
 async function bootstrap() {
+    _botConfig.default.api.setMyCommands([
+        {
+            command: "start",
+            description: "start bot "
+        }
+    ]);
     try {
         await _db.default.initialize();
         _botConfig.default.use((0, _conversations.conversations)());

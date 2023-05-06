@@ -1,10 +1,10 @@
-import { getRepository } from "typeorm";
 import bot from "../../config/botConfig";
 import {
   ADMIN_PHONE_NUMBER,
   ADMIN_TELEGRAM_ID,
   ADMIN_TELEGRAM_USERNAME,
   CHANNEL_ID,
+  MAX_IMG_SIZE,
 } from "../../config/constants";
 import { House } from "../../entity/House";
 import { MyContext } from "../../types";
@@ -13,7 +13,7 @@ import {
   housePostWithStatusBuilder,
 } from "../../utils/housepost";
 import { HouseImage } from "../../entity/HouseImage";
-const BOT_ID = "delalaet_bot";
+import { InputMediaPhoto } from "grammy/types";
 // approve house
 
 export const approveHouse = async (ctx: MyContext) => {
@@ -107,14 +107,14 @@ async function handleApproval(ctx: MyContext, status: "APPROVED" | "REJECTED") {
           <b>Telegram </b>: @${ADMIN_TELEGRAM_USERNAME}
             `,
           },
-          {
-            type: "photo",
-            media: houseImages[0].image as string,
-          },
-          {
-            type: "photo",
-            media: houseImages[0].image as string,
-          },
+          ...(Array(MAX_IMG_SIZE - 1)
+            .fill(1)
+            .map((_, i) => {
+              return {
+                type: "photo",
+                media: houseImages[i + 1].image,
+              };
+            }) as InputMediaPhoto[]),
         ]);
       }
 
@@ -136,14 +136,14 @@ async function handleApproval(ctx: MyContext, status: "APPROVED" | "REJECTED") {
             propertyType: house.propertyType,
           }),
         },
-        {
-          type: "photo",
-          media: houseImages[0].image as string,
-        },
-        {
-          type: "photo",
-          media: houseImages[0].image as string,
-        },
+        ...(Array(MAX_IMG_SIZE - 1)
+          .fill(1)
+          .map((_, i) => {
+            return {
+              type: "photo",
+              media: houseImages[i + 1].image,
+            };
+          }) as InputMediaPhoto[]),
       ]);
     }
     // approve the house

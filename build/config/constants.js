@@ -36,6 +36,9 @@ _export(exports, {
     CANCEL: function() {
         return CANCEL;
     },
+    MAX_IMG_SIZE: function() {
+        return MAX_IMG_SIZE;
+    },
     SUBCITIES: function() {
         return SUBCITIES;
     },
@@ -112,6 +115,7 @@ const USERS = [
 const USER = "USERS";
 const SETTING = "setting";
 const CANCEL = "cancel";
+const MAX_IMG_SIZE = 8;
 const SUBCITIES = [
     "Addis Ketema",
     "Akaki Kaliti",

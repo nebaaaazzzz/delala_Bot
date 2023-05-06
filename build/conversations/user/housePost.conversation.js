@@ -27,25 +27,43 @@ async function handleCancelFromCtx(ctx) {
             reply_markup: (0, _keyboards.getUserMainMenuKeyboard)(ctx)
         });
         return await ctx.conversation.exit();
+    } else if (ctx.message?.text == ctx.t("DONE")) {
+        return true; // TO BREAK THE FOR LOOP
     }
 }
 async function housePostConversation(conversation, ctx, housePostType) {
     let message;
     let imgArray = [];
-    const IMG_SIZE = 3;
-    for(; imgArray.length < 3;){
-        await ctx.reply(// IMG_SIZE - imgArray.length
+    let breakFoorLoop = false;
+    let x = 0;
+    for(let i = 1; imgArray.length < _constants.MAX_IMG_SIZE; i++){
+        console.log("break Foooor lO : ", x);
+        if (breakFoorLoop) {
+            break;
+        }
+        await ctx.reply(// IMG_SIZE - imgArray.lengthJ
         ctx.t("pls-shr-pic-z-house", {
-            imgLength: IMG_SIZE - imgArray.length
+            imgLength: i
         }), {
-            reply_markup: (0, _keyboards.getCancelKeyboard)(ctx)
+            reply_markup: imgArray.length >= 3 ? (0, _keyboards.getCancelWithDoneKeyboard)(ctx) // IF IMG ARRAY LENGTH IS GREATER THAN 3
+             : (0, _keyboards.getCancelKeyboard)(ctx)
         });
-        const img = await conversation.waitFor(":photo", {
-            otherwise: async (ctx)=>{
-                return await handleCancelFromCtx(ctx);
+        const img = await conversation.waitFor([
+            ":text",
+            ":photo"
+        ]);
+        if (img.message?.photo) {
+            imgArray.push(img.message?.photo[0].file_id);
+        } else {
+            if (img.message?.text == ctx.t("DONE")) {
+                break;
+            } else if (img.message?.text == ctx.t("CANCEL")) {
+                await ctx.reply(ctx.t("mm"), {
+                    reply_markup: (0, _keyboards.getUserMainMenuKeyboard)(ctx)
+                });
+                return await ctx.conversation.exit();
             }
-        });
-        imgArray.push(img.message?.photo[0].file_id);
+        }
     }
     await ctx.reply(ctx.t("Slct-sub-city-zhouse"), {
         reply_markup: (0, _keyboards.getSelectSubCityKeyboardWithCancel)(ctx)
@@ -122,14 +140,12 @@ async function housePostConversation(conversation, ctx, housePostType) {
                 housePostType
             })
         },
-        {
-            type: "photo",
-            media: imgArray[1]
-        },
-        {
-            type: "photo",
-            media: imgArray[2]
-        }
+        ...Array(_constants.MAX_IMG_SIZE - 1).fill(1).map((_, i)=>{
+            return {
+                type: "photo",
+                media: imgArray[i + 1]
+            };
+        })
     ]);
     await ctx.reply(ctx.t("cfirm-submit-house"), {
         reply_to_message_id: message[0].message_id,
@@ -142,7 +158,7 @@ async function housePostConversation(conversation, ctx, housePostType) {
     let submitted = cbData.callbackQuery.data == _constants.SUBMIT;
     if (submitted) {
         let houseImageArray = [];
-        for(let i = 0; i < 3; i++){
+        for(let i = 0; i < _constants.MAX_IMG_SIZE; i++){
             const houseImage = new _HouseImage.HouseImage();
             houseImage.image = imgArray[i];
             houseImageArray.push(houseImage);
@@ -184,14 +200,12 @@ async function housePostConversation(conversation, ctx, housePostType) {
                     housePostType
                 })
             },
-            {
-                type: "photo",
-                media: imgArray[1]
-            },
-            {
-                type: "photo",
-                media: imgArray[2]
-            }
+            ...Array(_constants.MAX_IMG_SIZE - 1).fill(1).map((_, i)=>{
+                return {
+                    type: "photo",
+                    media: imgArray[i + 1]
+                };
+            })
         ]);
         await _botConfig.default.api.sendMessage(_constants.ADMIN_TELEGRAM_ID, "confirm", {
             reply_to_message_id: message[0].message_id,

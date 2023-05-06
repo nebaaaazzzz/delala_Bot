@@ -12,6 +12,12 @@ import { ADMIN, NOT_REGISTERED, REGISTERED } from "./config/constants";
 import AppDataSource from "./config/db";
 import { MyContext, MyConversation } from "./types";
 async function bootstrap() {
+  bot.api.setMyCommands([
+    {
+      command: "start",
+      description: "start bot ",
+    },
+  ]);
   try {
     await AppDataSource.initialize();
     bot.use(conversations());

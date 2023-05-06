@@ -8,6 +8,7 @@ pls-snd-yr-fn = እባክዎን ሙሉ ስምዎን ይላኩ።
 chse-sub-city = ክፍለ ከተማን ይምረጡ
 BROKER = ደላላ
 HOME_SEEKER = ቤት ፈላጊ
+DONE = ጨርስ
 ## broker translations
 
 pls-shr-pic-z-house =እባኮትን የቤቱን {$imgLength} ፎቶዎች ያካፍሉ።

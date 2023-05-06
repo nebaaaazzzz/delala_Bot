@@ -8,6 +8,7 @@ pls-snd-yr-fn = Please send your full name
 chse-sub-city  = Choose sub city 
 BROKER = Broker
 HOME_SEEKER = Home Seeker
+DONE = Done
 ## broker translations
 
 pls-shr-pic-z-house =Please share {$imgLength} photos of the house
@@ -43,7 +44,7 @@ TERMS_OF_USE = Terms of Use
 CANCEL = Cancel
 EDIT = Edit
 CHANNEL= Channel
-CHANNEL_TEXT = CHANNEL_TEXT = You Search for houses that are already in the market from our REALTOReth Channel
+CHANNEL_TEXT = You Search for houses that are already in the market from our REALTOReth Channel
 SUBMIT = Submit
 SUBCITIES = ["Addis Ketema" ,"Kaliti","Arada", "Bole","Gulele" ,"Kirkos" ,"Kolfe Keranio" ,"Lideta","Nifas Silk-Lafto","Yeka" ,"Lemi Kura"	]
 PROPERTY_TYPES = ["Conduminum","Apartment","Villa","Real Estate Apartment","Commercial","Empty Land","Other"] 

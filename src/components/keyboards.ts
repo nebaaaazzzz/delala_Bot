@@ -140,6 +140,12 @@ export function getSelectRequestTypeKeyboardWithCancel(ctx: MyContext) {
 export function getCancelKeyboard(ctx: MyContext) {
   return new Keyboard([[{ text: ctx.t("CANCEL") }]]).resized(true);
 }
+export function getCancelWithDoneKeyboard(ctx: MyContext) {
+  return new Keyboard([
+    [{ text: ctx.t("CANCEL") }],
+    [{ text: ctx.t("DONE") }],
+  ]).resized(true);
+}
 export const selectLanguageKeyboard = new Keyboard([
   [
     {

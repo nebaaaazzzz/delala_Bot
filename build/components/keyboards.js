@@ -42,6 +42,9 @@ _export(exports, {
     getCancelKeyboard: function() {
         return getCancelKeyboard;
     },
+    getCancelWithDoneKeyboard: function() {
+        return getCancelWithDoneKeyboard;
+    },
     selectLanguageKeyboard: function() {
         return selectLanguageKeyboard;
     },
@@ -198,6 +201,20 @@ function getCancelKeyboard(ctx) {
         [
             {
                 text: ctx.t("CANCEL")
+            }
+        ]
+    ]).resized(true);
+}
+function getCancelWithDoneKeyboard(ctx) {
+    return new _grammy.Keyboard([
+        [
+            {
+                text: ctx.t("CANCEL")
+            }
+        ],
+        [
+            {
+                text: ctx.t("DONE")
             }
         ]
     ]).resized(true);

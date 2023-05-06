@@ -25,7 +25,6 @@ function _interop_require_default(obj) {
         default: obj
     };
 }
-const BOT_ID = "delalaet_bot";
 const approveHouse = async (ctx)=>{
     console.log("approve");
     await handleApproval(ctx, "APPROVED");
@@ -108,14 +107,12 @@ async function handleApproval(ctx, status) {
           <b>Telegram </b>: @${_constants.ADMIN_TELEGRAM_USERNAME}
             `
                     },
-                    {
-                        type: "photo",
-                        media: houseImages[0].image
-                    },
-                    {
-                        type: "photo",
-                        media: houseImages[0].image
-                    }
+                    ...Array(_constants.MAX_IMG_SIZE - 1).fill(1).map((_, i)=>{
+                        return {
+                            type: "photo",
+                            media: houseImages[i + 1].image
+                        };
+                    })
                 ]);
             }
             await ctx.i18n.useLocale(house.user.language);
@@ -136,14 +133,12 @@ async function handleApproval(ctx, status) {
                         propertyType: house.propertyType
                     })
                 },
-                {
-                    type: "photo",
-                    media: houseImages[0].image
-                },
-                {
-                    type: "photo",
-                    media: houseImages[0].image
-                }
+                ...Array(_constants.MAX_IMG_SIZE - 1).fill(1).map((_, i)=>{
+                    return {
+                        type: "photo",
+                        media: houseImages[i + 1].image
+                    };
+                })
             ]);
         }
     // approve the house

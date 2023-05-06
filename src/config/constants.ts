@@ -7,7 +7,7 @@ export const USERS = [BROKER, HOME_SEEKER];
 export const USER = "USERS";
 export const SETTING = "setting";
 export const CANCEL = "cancel";
-
+export const MAX_IMG_SIZE = 8;
 export const SUBCITIES = [
   "Addis Ketema",
   "Akaki Kaliti",
