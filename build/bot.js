@@ -28,10 +28,10 @@ async function bootstrap() {
     ]);
     try {
         await _db.default.initialize();
-        _botConfig.default.use((ctx, next)=>{
-            console.log(ctx.from?.username, " === : ", ctx?.chat.id);
-            next();
-        });
+        // bot.use((ctx, next) => {
+        //   console.log(ctx.from?.username, " === : ", ctx?.chat.id);
+        //   next();
+        // });
         _botConfig.default.use((0, _conversations.conversations)());
         _botConfig.default.use(_router.default);
         (0, _adminroutes.default)(_router.default.route(_constants.ADMIN));
