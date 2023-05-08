@@ -15,12 +15,12 @@ const _HouseImage = require("../entity/HouseImage");
 const _HouseRequest = require("../entity/HouseRequest");
 const _session = require("../entity/session");
 const AppDataSource = new _typeorm.DataSource({
-    // url: process.env.DATABASE_URL,
+    url: process.env.DATABASE_URL,
     type: "mysql",
-    host: "localhost",
-    port: 3306,
-    username: "root",
-    password: "",
+    // host: "localhost",
+    // port: 3306,
+    // username: "root",
+    // password: "",
     database: "delala",
     synchronize: true,
     logging: false,
