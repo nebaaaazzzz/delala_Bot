@@ -134,7 +134,7 @@ async function housePostConversation(conversation, ctx, housePostType) {
                 housePostType
             })
         },
-        ...Array(_constants.MAX_IMG_SIZE - 1).fill(1).map((_, i)=>{
+        ...Array(imgArray.length - 1).fill(1).map((_, i)=>{
             return {
                 type: "photo",
                 media: imgArray[i + 1]
@@ -152,7 +152,7 @@ async function housePostConversation(conversation, ctx, housePostType) {
     let submitted = cbData.callbackQuery.data == _constants.SUBMIT;
     if (submitted) {
         let houseImageArray = [];
-        for(let i = 0; i < _constants.MAX_IMG_SIZE; i++){
+        for(let i = 0; i < imgArray.length - 1; i++){
             const houseImage = new _HouseImage.HouseImage();
             houseImage.image = imgArray[i];
             houseImageArray.push(houseImage);
@@ -174,7 +174,6 @@ async function housePostConversation(conversation, ctx, housePostType) {
         house.propertyType = propertyType;
         house.houseImages = houseImageArray;
         const savedHouse = await house.save();
-        console.log(savedHouse);
         await ctx.reply(ctx.t("success-submit-house"), {
             reply_markup: (0, _keyboards.getUserMainMenuKeyboard)(ctx)
         });
@@ -194,7 +193,7 @@ async function housePostConversation(conversation, ctx, housePostType) {
                     housePostType
                 })
             },
-            ...Array(_constants.MAX_IMG_SIZE - 1).fill(1).map((_, i)=>{
+            ...Array(imgArray.length - 1).fill(1).map((_, i)=>{
                 return {
                     type: "photo",
                     media: imgArray[i + 1]

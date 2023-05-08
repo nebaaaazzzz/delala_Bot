@@ -5,8 +5,6 @@ export function userBuilder(user: any): string {
 <b>telegram last name = </b>  ${user.telegramLastName}
 <b>username = </b>     ${user.userName}
 <b>phone number = </b> ${user.phoneNumber}
-<b>subcity = </b> ${user.subCity}
-<b>user type = </b> ${user.userType}
 <b>language preference = </b> ${user.language}
 <b>register At = </b> ${user.createdAt}
 `;

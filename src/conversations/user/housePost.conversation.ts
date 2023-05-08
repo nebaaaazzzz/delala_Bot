@@ -139,7 +139,6 @@ export async function housePostConversation(
     await handleCancelFromCtx(ctx);
   });
   //**end price  */
-
   message = await ctx.replyWithMediaGroup([
     {
       type: "photo",
@@ -156,7 +155,7 @@ export async function housePostConversation(
         housePostType,
       }),
     },
-    ...(Array(MAX_IMG_SIZE - 1)
+    ...(Array(imgArray.length - 1)
       .fill(1)
       .map((_, i) => {
         return {
@@ -176,7 +175,7 @@ export async function housePostConversation(
   let submitted = cbData.callbackQuery.data == SUBMIT;
   if (submitted) {
     let houseImageArray: HouseImage[] = [];
-    for (let i = 0; i < MAX_IMG_SIZE; i++) {
+    for (let i = 0; i < imgArray.length - 1; i++) {
       const houseImage = new HouseImage();
       houseImage.image = imgArray[i] as string;
       houseImageArray.push(houseImage);
@@ -198,7 +197,6 @@ export async function housePostConversation(
     house.propertyType = propertyType;
     house.houseImages = houseImageArray;
     const savedHouse = await house.save();
-    console.log(savedHouse);
     await ctx.reply(ctx.t("success-submit-house"), {
       reply_markup: getUserMainMenuKeyboard(ctx),
     });
@@ -218,7 +216,7 @@ export async function housePostConversation(
           housePostType,
         }),
       },
-      ...(Array(MAX_IMG_SIZE - 1)
+      ...(Array(imgArray.length - 1)
         .fill(1)
         .map((_, i) => {
           return {

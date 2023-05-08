@@ -18,7 +18,7 @@ _export(exports, {
 });
 const _grammy = require("grammy");
 const _housepost = require("../housepost");
-const _House = require("../../entity/House");
+const _User = require("../../entity/User");
 const paginateHouse = async (ctx)=>{
     const session = ctx.session;
     //["" , "house" , "page" , "param"]
@@ -28,9 +28,17 @@ const paginateHouse = async (ctx)=>{
         const currentPageNumber = session.pageNumber;
         const userId = ctx.from?.id;
         if (userId) {
-            const houses = await _House.House.getRepository().createQueryBuilder("house").leftJoinAndSelect("house.user", "user").where(String(userId)).orderBy({
-                createdAt: "DESC"
-            }).execute();
+            const houses = (await _User.User.find({
+                where: {
+                    telegramId: String(userId)
+                },
+                relations: {
+                    houses: true
+                },
+                order: {
+                    createdAt: "DESC"
+                }
+            }))[0].houses;
             if (houses.length) {
                 const postedHouseLength = houses.length;
                 const house = houses[currentPageNumber - 1];
@@ -87,9 +95,17 @@ const getMyHouses = async (ctx)=>{
     const session = await ctx.session;
     const userId = ctx.from?.id;
     if (userId) {
-        const houses = await _House.House.getRepository().createQueryBuilder("house").leftJoinAndSelect("house.user", "user").where(String(userId)).orderBy({
-            createdAt: "DESC"
-        }).execute();
+        const houses = (await _User.User.find({
+            where: {
+                telegramId: String(userId)
+            },
+            relations: {
+                houses: true
+            },
+            order: {
+                createdAt: "DESC"
+            }
+        }))[0].houses;
         if (houses.length) {
             const userHousePostLength = houses.length;
             const house = houses[0];

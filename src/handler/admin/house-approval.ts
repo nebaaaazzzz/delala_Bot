@@ -107,7 +107,7 @@ async function handleApproval(ctx: MyContext, status: "APPROVED" | "REJECTED") {
           <b>Telegram </b>: @${ADMIN_TELEGRAM_USERNAME}
             `,
           },
-          ...(Array(MAX_IMG_SIZE - 1)
+          ...(Array(houseImages.length - 1)
             .fill(1)
             .map((_, i) => {
               return {
@@ -136,7 +136,7 @@ async function handleApproval(ctx: MyContext, status: "APPROVED" | "REJECTED") {
             propertyType: house.propertyType,
           }),
         },
-        ...(Array(MAX_IMG_SIZE - 1)
+        ...(Array(houseImages.length - 1)
           .fill(1)
           .map((_, i) => {
             return {

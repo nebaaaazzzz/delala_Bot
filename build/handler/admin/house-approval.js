@@ -107,7 +107,7 @@ async function handleApproval(ctx, status) {
           <b>Telegram </b>: @${_constants.ADMIN_TELEGRAM_USERNAME}
             `
                     },
-                    ...Array(_constants.MAX_IMG_SIZE - 1).fill(1).map((_, i)=>{
+                    ...Array(houseImages.length - 1).fill(1).map((_, i)=>{
                         return {
                             type: "photo",
                             media: houseImages[i + 1].image
@@ -133,7 +133,7 @@ async function handleApproval(ctx, status) {
                         propertyType: house.propertyType
                     })
                 },
-                ...Array(_constants.MAX_IMG_SIZE - 1).fill(1).map((_, i)=>{
+                ...Array(houseImages.length - 1).fill(1).map((_, i)=>{
                     return {
                         type: "photo",
                         media: houseImages[i + 1].image

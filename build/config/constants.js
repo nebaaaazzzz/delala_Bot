@@ -137,9 +137,9 @@ const PROPERTY_TYPES = [
     "Commercial"
 ];
 const REQUEST_HOUSE = "Request House";
-const ADMIN_TELEGRAM_ID = 5455454217; //admin chat id
+const ADMIN_TELEGRAM_ID = 430099839; //admin nebiyu chat id
 const CHANNEL_ID = -1001668303230;
-const ADMIN_TELEGRAM_USERNAME = "realtoret";
+const ADMIN_TELEGRAM_USERNAME = "Nebaaaazzzz";
 const ADMIN_PHONE_NUMBER = "+251914514657";
 const SELL_HOUSE = "Sell House";
 const RENT_HOUSE = "Rent house";
