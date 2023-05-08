@@ -29,11 +29,11 @@ export const PROPERTY_TYPES = [
   "Commercial",
 ];
 export const REQUEST_HOUSE = "Request House";
-export const ADMIN_TELEGRAM_ID = 430099839; //admin nebiyu chat id
-// export const ADMIN_TELEGRAM_ID = 5455454217; //admin chat id
+// export const ADMIN_TELEGRAM_ID = 430099839; //admin nebiyu chat id
+export const ADMIN_TELEGRAM_ID = 5455454217; //admin chat id
 export const CHANNEL_ID = -1001668303230;
-// export const ADMIN_TELEGRAM_USERNAME = "realtoret";
-export const ADMIN_TELEGRAM_USERNAME = "Nebaaaazzzz";
+export const ADMIN_TELEGRAM_USERNAME = "realtoret";
+// export const ADMIN_TELEGRAM_USERNAME = "Nebaaaazzzz";
 export const ADMIN_PHONE_NUMBER = "+251914514657";
 export const SELL_HOUSE = "Sell House";
 export const RENT_HOUSE = "Rent house";
