@@ -17,7 +17,7 @@ interface SessionData {
 }
 
 const bot = new Bot<MyContext>(
-  "5924425080:AAHCQe6j6O6W0Fn6sAWz1DHkj879VDhdOmA"
+  ""
 );
 
 export const i18n = new I18n<MyContext>({
